@@ -1,10 +1,10 @@
 export function meta() {
 	return [
-		{ title: "How we built — Cursor lane" },
+		{ title: "How we built — Cursor multi-agent" },
 		{
 			name: "description",
 			content:
-				"Jury pointer: Sal → Hackermans → cursor Agent on Sapne; Titans/coder support.",
+				"Observable multi-agent seats: Sal → Hackermans → Cursor Agent on Sapne; Titans + coder support.",
 		},
 	];
 }
@@ -13,41 +13,68 @@ export default function HowWeBuiltRoute() {
 	return (
 		<main
 			id="main-content"
-			className="mx-auto flex min-h-dvh w-full max-w-lg flex-col gap-4 bg-background px-4 py-8 text-foreground"
+			className="mx-auto flex min-h-dvh w-full max-w-lg flex-col gap-5 bg-background px-4 py-8 text-foreground"
 		>
 			<p className="font-ui text-caption uppercase tracking-[0.12em] text-muted-foreground">
-				Multi-agent orchestration
+				Multi-agent orchestration · Definition of Done
 			</p>
 			<h1 className="font-display text-heading-1">Built with Cursor Agent</h1>
 			<p className="font-body text-body">
-				Sal (phone) captured the challenge. Hackermans cut scope.{" "}
-				<strong>cursor</strong> co-drove Sal&apos;s Cursor on Sapne (
-				salahuddinuqaili@outlook.com, $50 organizer credits) to ship{" "}
-				<code className="font-ui">/salbot</code> and Tax Pulse polish.
+				Winning Cursor demos show <strong>one clear loop</strong> and{" "}
+				<strong>visible seats</strong> — not feature sprawl.
 			</p>
-			<p className="font-body text-body-sm text-muted-foreground">
-				Support seats: ivan → Titans (plan/docs), coder (PE), feedback (UX
-				bible). Humans Shirley/Sam/Eugene as assigned on Tax Pulse.
-			</p>
-			<ul className="list-disc space-y-1 pl-5 font-body text-body-sm">
-				<li>
-					<code className="font-ui">002e4e0</code> — SalBot chat experiment
-				</li>
-				<li>
-					<code className="font-ui">aae4a07</code> — messaging UX + Akte save
-				</li>
-				<li>
-					<code className="font-ui">76a4054</code> — UX bible soft beats
-				</li>
-			</ul>
-			<p className="font-body text-body-sm">
-				Full trail: <code className="font-ui">HOW-WE-BUILT.md</code> ·{" "}
-				<code className="font-ui">TEAM-PLAN/HOW-WE-BUILT.md</code> ·{" "}
-				<code className="font-ui">DEMO-SALBOT.md</code>
-			</p>
+
+			<section className="space-y-2 border border-frame-ink bg-card p-4">
+				<h2 className="font-ui text-heading-2">Parallel seats</h2>
+				<ul className="space-y-2 font-body text-body-sm">
+					<li>
+						<strong>Sal</strong> — phone capture, veto, pitch video
+					</li>
+					<li>
+						<strong>Hackermans</strong> — ruthless scope + clock
+					</li>
+					<li>
+						<strong>Cursor Agent (cursor)</strong> — Sapne co-drive, $50
+						organizer credits, shipped <code>/salbot</code>
+					</li>
+					<li>
+						<strong>Titans</strong> — TEAM-PLAN / SCORE / docs in parallel
+					</li>
+					<li>
+						<strong>coder</strong> — PE: Akte isolation, StBerG, hardening
+					</li>
+				</ul>
+			</section>
+
+			<section className="space-y-2 border border-frame-ink bg-card p-4">
+				<h2 className="font-ui text-heading-2">Handoffs</h2>
+				<ol className="list-decimal space-y-1 pl-5 font-body text-body-sm">
+					<li>
+						Sal pastes challenge → Hackermans cuts Year File / SalBot lanes
+					</li>
+					<li>cursor Agent implements on Sapne (SalBot branch only)</li>
+					<li>Titans write shared truth; coder PE-passes storage/safety</li>
+					<li>Sal films Demo Mode one-tap loop</li>
+				</ol>
+			</section>
+
+			<section className="space-y-2 border border-frame-ink bg-card p-4">
+				<h2 className="font-ui text-heading-2">Definition of Done</h2>
+				<ul className="list-disc space-y-1 pl-5 font-body text-body-sm">
+					<li>
+						<code>/salbot</code> Demo Mode: coworking → Bahn → Netflix → Akte
+					</li>
+					<li>Live orchestration strip + this page observable in Q&amp;A</li>
+					<li>
+						Tax Pulse <code>/</code> film path untouched
+					</li>
+					<li>SHAs: 002e4e0 · aae4a07 · 76a4054 · 423f7f6 (PE) · trail docs</li>
+				</ul>
+			</section>
+
 			<p className="font-body text-caption text-muted-foreground">
 				<a className="underline" href="/salbot">
-					← SalBot chat
+					← SalBot (Demo Mode)
 				</a>
 				{" · "}
 				<a className="underline" href="/">

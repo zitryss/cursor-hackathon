@@ -3,8 +3,8 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
 	addExpenseToSalBotAkte,
-	clearSalBotAkte,
 	loadSalBotAkte,
+	saveSalBotAkte,
 } from "~/features/salbot/salbot-akte-store";
 import {
 	clearChat,
@@ -35,11 +35,28 @@ const DEMO_CHIPS = [
 	{ label: "Netflix 12.99", text: "Netflix 12.99" },
 ] as const;
 
+const DEMO_SCRIPT = [
+	{ text: "coworking day pass 45", autoSave: true, context: "work" as const },
+	{
+		text: "Bahn to client meeting 28.50",
+		autoSave: true,
+		context: "mixed" as const,
+	},
+	{ text: "Netflix 12.99", autoSave: false, context: "private" as const },
+] as const;
+
 const CONTEXT_CHIPS = [
 	{ label: "Work", hint: "work" as const },
 	{ label: "Mixed", hint: "mixed" as const },
 	{ label: "Private", hint: "private" as const },
 ];
+
+const ORCH_SEATS = [
+	{ name: "Hackermans", detail: "scope · clock" },
+	{ name: "Cursor Agent", detail: "Sapne · $50 · 002e4e0→76a4054" },
+	{ name: "Titans", detail: "plan · docs" },
+	{ name: "coder", detail: "PE · Akte" },
+] as const;
 
 const WELCOME: SalBotMessage = {
 	id: "welcome",
@@ -134,6 +151,10 @@ function softBeat(
 	};
 }
 
+function sleep(ms: number) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export function meta() {
 	return [
 		{ title: "SalBot / Taxfix Chat Check" },
@@ -153,17 +174,22 @@ export default function SalBotRoute() {
 	const [listening, setListening] = useState(false);
 	const [yearFile, setYearFile] = useState<YearFileState>(emptyYearFile);
 	const [voiceHint, setVoiceHint] = useState<string | null>(null);
+	const [typing, setTyping] = useState(false);
+	const [demoRunning, setDemoRunning] = useState(false);
 	const [contextHint, setContextHint] = useState<
 		"work" | "mixed" | "private" | null
 	>(null);
 	const listRef = useRef<HTMLDivElement>(null);
 	const recognitionRef = useRef<{ stop: () => void } | null>(null);
-	const savingRef = useRef(false);
+	const akteRef = useRef<YearFileState>(emptyYearFile());
+	const demoCancelRef = useRef(false);
 
 	useEffect(() => {
 		const stored = loadChat();
 		setMessages(stored.length > 0 ? stored : [WELCOME]);
-		setYearFile(loadSalBotAkte());
+		const akte = loadSalBotAkte();
+		akteRef.current = akte;
+		setYearFile(akte);
 		setReady(true);
 	}, []);
 
@@ -181,10 +207,14 @@ export default function SalBotRoute() {
 	const weekly = weeklySaveEuro(yearFile.expenses);
 	const ytd = ytdImpactEuro(yearFile.expenses);
 
-	function sendText(raw: string, hasImage: boolean) {
+	function sendText(
+		raw: string,
+		hasImage: boolean,
+		overrideContext?: "work" | "mixed" | "private" | null,
+	) {
 		const trimmed = raw.trim().slice(0, MAX_CHAT_INPUT);
 		if (!trimmed && !hasImage) {
-			return;
+			return null;
 		}
 		const userText = trimmed || "(image — add a caption next time)";
 		const userMsg: SalBotMessage = {
@@ -194,10 +224,52 @@ export default function SalBotRoute() {
 			text: userText,
 			imageNote: hasImage ? (imageName ?? "image") : undefined,
 		};
-		const botMsg = softBeat(trimmed || "receipt photo", hasImage, contextHint);
+		const botMsg = softBeat(
+			trimmed || "receipt photo",
+			hasImage,
+			overrideContext === undefined ? contextHint : overrideContext,
+		);
 		setMessages((prev) => [...prev, userMsg, botMsg]);
 		setInput("");
 		setImageName(null);
+		return botMsg;
+	}
+
+	function saveBotMessage(botMsg: SalBotMessage) {
+		if (!botMsg.description) {
+			return;
+		}
+		const amountEuro = botMsg.amountEuro;
+		if (
+			typeof amountEuro !== "number" ||
+			!Number.isFinite(amountEuro) ||
+			amountEuro <= 0
+		) {
+			return;
+		}
+		const result = addExpenseToSalBotAkte(akteRef.current, {
+			description: botMsg.description,
+			amountEuro,
+			id: `akte-${botMsg.id}`,
+		});
+		if (!result) {
+			return;
+		}
+		akteRef.current = result.state;
+		setYearFile(result.state);
+		setMessages((prev) =>
+			prev.map((message) =>
+				message.id === botMsg.id
+					? {
+							...message,
+							savedToFile: true,
+							text:
+								message.text +
+								` In your Akte. Weekly ${formatEuro(weeklySaveEuro(result.state.expenses))} / YTD ${formatEuro(ytdImpactEuro(result.state.expenses))}.`,
+						}
+					: message,
+			),
+		);
 	}
 
 	function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -206,9 +278,6 @@ export default function SalBotRoute() {
 	}
 
 	function onSaveToFile(messageId: string) {
-		if (savingRef.current) {
-			return;
-		}
 		const target = messages.find((message) => message.id === messageId);
 		if (target?.role !== "bot" || !target.description) {
 			return;
@@ -216,42 +285,7 @@ export default function SalBotRoute() {
 		if (target.savedToFile) {
 			return;
 		}
-		const amountEuro = target.amountEuro;
-		if (
-			typeof amountEuro !== "number" ||
-			!Number.isFinite(amountEuro) ||
-			amountEuro <= 0
-		) {
-			return;
-		}
-		const result = addExpenseToSalBotAkte(yearFile, {
-			description: target.description,
-			amountEuro,
-			id: `akte-${messageId}`,
-		});
-		if (!result) {
-			return;
-		}
-		savingRef.current = true;
-		try {
-		const { state } = result;
-		setYearFile(state);
-		setMessages((prev) =>
-			prev.map((message) =>
-				message.id === messageId
-					? {
-							...message,
-							savedToFile: true,
-							text:
-								message.text +
-								` In your Akte. Weekly ${formatEuro(weeklySaveEuro(state.expenses))} / YTD ${formatEuro(ytdImpactEuro(state.expenses))}.`,
-						}
-					: message,
-			),
-		);
-		} finally {
-			savingRef.current = false;
-		}
+		saveBotMessage(target);
 	}
 
 	function onVoice() {
@@ -271,7 +305,7 @@ export default function SalBotRoute() {
 				: undefined;
 
 		if (!SpeechRecognition) {
-			setVoiceHint("No mic API — mock transcript loaded. Edit or send.");
+			setVoiceHint("Mic API unavailable — mock transcript ready. Tap Send.");
 			setInput("coworking day pass 45");
 			setListening(false);
 			return;
@@ -283,49 +317,114 @@ export default function SalBotRoute() {
 			return;
 		}
 
-		const recognition = new SpeechRecognition();
-		recognition.lang = "de-DE";
-		recognition.interimResults = false;
-		recognition.maxAlternatives = 1;
-		recognition.onresult = (event: {
-			results: {
-				[index: number]: { [index: number]: { transcript: string } };
+		try {
+			const recognition = new SpeechRecognition();
+			recognition.lang = "de-DE";
+			recognition.interimResults = false;
+			recognition.maxAlternatives = 1;
+			recognition.onresult = (event: {
+				results: {
+					[index: number]: { [index: number]: { transcript: string } };
+				};
+			}) => {
+				const transcript = event.results[0]?.[0]?.transcript ?? "";
+				setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
+				setVoiceHint("Voice captured — tap Send.");
 			};
-		}) => {
-			const transcript = event.results[0]?.[0]?.transcript ?? "";
-			setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
-			setVoiceHint("Voice captured — tap Send.");
-		};
-		recognition.onerror = () => {
-			setVoiceHint("Voice failed — type it, or tap Voice for a mock line.");
+			recognition.onerror = () => {
+				setVoiceHint("Voice failed — mock loaded instead. Edit or tap Send.");
+				setInput((prev) => prev || "coworking day pass 45");
+				setListening(false);
+			};
+			recognition.onend = () => {
+				setListening(false);
+				recognitionRef.current = null;
+			};
+			recognitionRef.current = recognition;
+			setListening(true);
+			setVoiceHint("Listening…");
+			recognition.start();
+		} catch {
+			setVoiceHint("Mic blocked — mock transcript ready. Tap Send.");
+			setInput("coworking day pass 45");
 			setListening(false);
-		};
-		recognition.onend = () => {
-			setListening(false);
-			recognitionRef.current = null;
-		};
-		recognitionRef.current = recognition;
-		setListening(true);
-		setVoiceHint("Listening…");
-		recognition.start();
+		}
 	}
 
 	function onResetDemo() {
-		// Clear both SalBot keys before state updates so the persist effect
-		// cannot resurrect a stale chat snapshot, and Akte week/YTD resets too.
+		demoCancelRef.current = true;
+		setDemoRunning(false);
+		setTyping(false);
 		clearChat();
-		clearSalBotAkte();
+		const empty = emptyYearFile();
+		saveSalBotAkte(empty);
+		akteRef.current = empty;
+		setYearFile(empty);
 		setMessages([WELCOME]);
-		setYearFile(emptyYearFile());
 		setInput("");
 		setImageName(null);
 		setVoiceHint(null);
 		setContextHint(null);
-		if (recognitionRef.current) {
-			recognitionRef.current.stop();
-			recognitionRef.current = null;
+	}
+
+	async function runDemoMode() {
+		if (demoRunning) {
+			return;
 		}
-		setListening(false);
+		demoCancelRef.current = true;
+		clearChat();
+		const empty = emptyYearFile();
+		saveSalBotAkte(empty);
+		akteRef.current = empty;
+		setYearFile(empty);
+		setMessages([WELCOME]);
+		setInput("");
+		setImageName(null);
+		setVoiceHint(null);
+		setContextHint(null);
+		setTyping(false);
+		demoCancelRef.current = false;
+		setDemoRunning(true);
+		await sleep(400);
+		if (demoCancelRef.current) {
+			setDemoRunning(false);
+			return;
+		}
+
+		for (const step of DEMO_SCRIPT) {
+			if (demoCancelRef.current) {
+				break;
+			}
+			setTyping(true);
+			await sleep(900);
+			setTyping(false);
+			if (demoCancelRef.current) {
+				break;
+			}
+			const botMsg = sendText(step.text, false, step.context);
+			await sleep(700);
+			if (demoCancelRef.current) {
+				break;
+			}
+			if (botMsg && step.autoSave) {
+				saveBotMessage(botMsg);
+			}
+			await sleep(1000);
+		}
+
+		if (!demoCancelRef.current) {
+			setTyping(true);
+			await sleep(800);
+			setTyping(false);
+			const close: SalBotMessage = {
+				id: crypto.randomUUID(),
+				role: "bot",
+				createdAt: new Date().toISOString(),
+				text: `Weekly ${formatEuro(weeklySaveEuro(akteRef.current.expenses))} in the Akte. I'd text this in November — not because Taxfix nagged me.`,
+			};
+			setMessages((prev) => [...prev, close]);
+		}
+		setDemoRunning(false);
 	}
 
 	return (
@@ -348,6 +447,37 @@ export default function SalBotRoute() {
 						Tax Pulse /
 					</a>
 				</div>
+
+				<section
+					aria-label="Live orchestration"
+					className="border border-frame-ink bg-card px-2 py-2"
+				>
+					<div className="mb-1 flex items-center justify-between gap-2">
+						<p className="font-ui text-caption uppercase tracking-wide text-muted-foreground">
+							Live orchestration
+						</p>
+						<a
+							className="font-ui text-caption uppercase underline"
+							href="/how-we-built"
+						>
+							How we built
+						</a>
+					</div>
+					<ul className="grid grid-cols-2 gap-1">
+						{ORCH_SEATS.map((seat) => (
+							<li
+								key={seat.name}
+								className="border border-frame-ink/40 px-2 py-1"
+							>
+								<p className="font-ui text-caption font-bold">{seat.name}</p>
+								<p className="font-body text-[10px] text-muted-foreground">
+									{seat.detail}
+								</p>
+							</li>
+						))}
+					</ul>
+				</section>
+
 				<p className="font-body text-caption text-muted-foreground">
 					Useful in November. Soft certainty. No nag. {NOT_ADVICE}
 				</p>
@@ -364,6 +494,15 @@ export default function SalBotRoute() {
 						conf {ready ? yearFile.confidence : "—"}/100
 					</p>
 				</div>
+				<Button
+					type="button"
+					className="w-full"
+					size="lg"
+					disabled={demoRunning}
+					onClick={() => void runDemoMode()}
+				>
+					{demoRunning ? "Demo running…" : "Demo Mode (one tap)"}
+				</Button>
 			</header>
 
 			<div
@@ -418,6 +557,11 @@ export default function SalBotRoute() {
 						) : null}
 					</article>
 				))}
+				{typing ? (
+					<p className="mr-10 self-start rounded-2xl border border-frame-ink bg-annotation px-3 py-2 font-body text-caption text-annotation-foreground">
+						SalBot is typing…
+					</p>
+				) : null}
 			</div>
 
 			<div className="sticky bottom-0 space-y-2 border-t border-frame-ink bg-background px-3 py-3">
@@ -443,6 +587,7 @@ export default function SalBotRoute() {
 							type="button"
 							size="sm"
 							variant="outline"
+							disabled={demoRunning}
 							onClick={() => sendText(chip.text, false)}
 						>
 							{chip.label}
@@ -465,6 +610,7 @@ export default function SalBotRoute() {
 							variant={listening ? "default" : "outline"}
 							size="lg"
 							aria-pressed={listening}
+							disabled={demoRunning}
 							onClick={onVoice}
 						>
 							{listening ? "Stop" : "Voice"}
@@ -475,6 +621,7 @@ export default function SalBotRoute() {
 							onChange={(event) => setInput(event.target.value)}
 							placeholder="Laptop 899 — or Bahn 12,40 Buero"
 							rows={2}
+							disabled={demoRunning}
 						/>
 					</div>
 					{voiceHint ? (
@@ -490,6 +637,7 @@ export default function SalBotRoute() {
 							type="file"
 							accept="image/*"
 							className="block w-full font-body text-caption"
+							disabled={demoRunning}
 							onChange={(event) => {
 								const file = event.target.files?.[0];
 								if (!file) {
@@ -504,12 +652,16 @@ export default function SalBotRoute() {
 									event.target.value = "";
 									return;
 								}
-								// Name only — never read bytes / remote URLs in the stub.
 								setImageName(file.name.slice(0, 120));
 							}}
 						/>
 					</label>
-					<Button type="submit" className="w-full" size="lg">
+					<Button
+						type="submit"
+						className="w-full"
+						size="lg"
+						disabled={demoRunning}
+					>
 						Send
 					</Button>
 				</form>
@@ -522,7 +674,7 @@ export default function SalBotRoute() {
 					<a className="underline" href="/how-we-built">
 						How we built
 					</a>
-					. Rough sketch — not tax advice. Tax Pulse stays on `/`.
+					. {NOT_ADVICE} Tax Pulse stays on `/`.
 				</p>
 			</div>
 		</main>

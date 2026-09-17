@@ -1,17 +1,15 @@
-# DEMO-SALBOT (chat film + orchestration beat)
+# DEMO-SALBOT (≤70s) — jury one-loop
 
-**URL:** http://127.0.0.1:5173/salbot after `pnpm run dev`  
-**Branch:** `SalBot` — Tax Pulse film path stays `/`.
+**URL:** http://127.0.0.1:5173/salbot · branch `SalBot`  
+**Do not** film Tax Pulse `/` unless intentional (Eugene path).
 
-## Chat path (~70s)
-1. Reset chat
-2. Chip **coworking 45** → soft beat → **Save to Akte**
-3. **Bahn 28.50** → Mixed beat → Save
-4. **Netflix 12.99** → “Looks private…” (honest no)
-5. Optional: Work chip + free text scrap
+## Path
+1. Open `/salbot`
+2. Tap **Demo Mode (one tap)** — zero typing
+3. Watch: coworking → Bahn → Netflix → Akte week/YTD moves (~1s beats)
+4. Hold **Live orchestration** strip (Hackermans · Cursor Agent · Titans · coder)
+5. Optional 5s cut to `/how-we-built`
+6. End line on screen/voice: weekly € + “I'd text this in November”
 
-## Orchestration shot (5–8s) — REQUIRED for Multi-agent score
-Hold the `/salbot` footer: **Built with Cursor Agent** · Sapne co-drive · $50 credits.  
-Cut to `/how-we-built` or say: “Sal phone → Hackermans scope → cursor on Sapne; Titans/coder support.”
-
-Do **not** tour architecture. One sentence + footer is enough.
+## Pitch close
+Taxes year-round in the chat you already use — clever, not nagging.
