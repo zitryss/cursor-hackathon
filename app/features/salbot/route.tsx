@@ -13,13 +13,20 @@ import {
 	roughTaxImpactEuro,
 } from "~/features/year-file/deductibility";
 import {
-	addExpenseToYearFile,
+	addExpenseToSalBotAkte,
+	loadSalBotAkte,
+} from "~/features/salbot/salbot-akte-store";
+import {
 	emptyYearFile,
-	loadYearFile,
 	weeklySaveEuro,
 	type YearFileState,
 	ytdImpactEuro,
 } from "~/features/year-file/year-file-store";
+
+const MAX_CHAT_INPUT = 500;
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const NOT_ADVICE =
+	"Keine Steuerberatung / keine Rechtsberatung (StBerG). Heuristik zur Orientierung — not tax advice.";
 
 const DEMO_CHIPS = [
 	{ label: "coworking 45", text: "coworking day pass 45" },
@@ -154,7 +161,7 @@ export default function SalBotRoute() {
 	useEffect(() => {
 		const stored = loadChat();
 		setMessages(stored.length > 0 ? stored : [WELCOME]);
-		setYearFile(loadYearFile());
+		setYearFile(loadSalBotAkte());
 		setReady(true);
 	}, []);
 
@@ -173,7 +180,7 @@ export default function SalBotRoute() {
 	const ytd = ytdImpactEuro(yearFile.expenses);
 
 	function sendText(raw: string, hasImage: boolean) {
-		const trimmed = raw.trim();
+		const trimmed = raw.trim().slice(0, MAX_CHAT_INPUT);
 		if (!trimmed && !hasImage) {
 			return;
 		}
@@ -204,10 +211,23 @@ export default function SalBotRoute() {
 		if (target.savedToFile) {
 			return;
 		}
-		const { state } = addExpenseToYearFile(yearFile, {
+		const amountEuro = target.amountEuro;
+		if (
+			typeof amountEuro !== "number" ||
+			!Number.isFinite(amountEuro) ||
+			amountEuro <= 0
+		) {
+			return;
+		}
+		const result = addExpenseToSalBotAkte(yearFile, {
 			description: target.description,
-			amountEuro: target.amountEuro ?? 40,
+			amountEuro,
+			id: `akte-${messageId}`,
 		});
+		if (!result) {
+			return;
+		}
+		const { state } = result;
 		setYearFile(state);
 		setMessages((prev) =>
 			prev.map((message) =>
@@ -310,8 +330,7 @@ export default function SalBotRoute() {
 					</a>
 				</div>
 				<p className="font-body text-caption text-muted-foreground">
-					Useful in November. Soft certainty. No nag. Rough sketch — not tax
-					advice.
+					Useful in November. Soft certainty. No nag. {NOT_ADVICE}
 				</p>
 				<div className="flex items-center justify-between gap-2 border border-frame-ink bg-card px-3 py-2">
 					<div>
@@ -454,7 +473,17 @@ export default function SalBotRoute() {
 							className="block w-full font-body text-caption"
 							onChange={(event) => {
 								const file = event.target.files?.[0];
-								setImageName(file ? file.name : null);
+								if (!file) {
+									setImageName(null);
+									return;
+								}
+								if (file.size > MAX_IMAGE_BYTES || !file.type.startsWith("image/")) {
+									setImageName(null);
+									event.target.value = "";
+									return;
+								}
+								// Name only — never read bytes / remote URLs in the stub.
+								setImageName(file.name.slice(0, 120));
 							}}
 						/>
 					</label>
@@ -463,8 +492,13 @@ export default function SalBotRoute() {
 					</Button>
 				</form>
 				<p className="font-body text-caption text-muted-foreground">
-					Work / Mixed / Private chips + free text. Rough sketch — not tax
-					advice. WhatsApp later. Tax Pulse film path stays on `/`.
+					<span className="font-ui uppercase tracking-wide">Built with Cursor Agent</span>
+					{" — "}
+					Sapne co-drive · $50 credits ·{" "}
+					<a className="underline" href="/how-we-built">
+						How we built
+					</a>
+					. Rough sketch — not tax advice. Tax Pulse stays on `/`.
 				</p>
 			</div>
 		</main>
