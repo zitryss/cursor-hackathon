@@ -11,7 +11,6 @@ import {
 	assessDeductibility,
 	formatEuro,
 	roughTaxImpactEuro,
-	verdictLabel,
 } from "~/features/year-file/deductibility";
 import {
 	addExpenseToYearFile,
@@ -28,11 +27,17 @@ const DEMO_CHIPS = [
 	{ label: "Netflix 12.99", text: "Netflix 12.99" },
 ] as const;
 
+const CONTEXT_CHIPS = [
+	{ label: "Work", hint: "work" as const },
+	{ label: "Mixed", hint: "mixed" as const },
+	{ label: "Private", hint: "private" as const },
+];
+
 const WELCOME: SalBotMessage = {
 	id: "welcome",
 	role: "bot",
 	createdAt: new Date(0).toISOString(),
-	text: "Taxfix in chat. Voice or text a spend — like you already text friends. ~20s: deductible? + why + rough EUR. Honest maybe/no. No nag.",
+	text: 'Drop a scrap like you text a friend — "Bahn 12,40 Buero" or "Laptop 899". One clear beat back. No forms. No nag.',
 };
 
 function parseSpend(raw: string): {
@@ -62,31 +67,56 @@ function parseSpend(raw: string): {
 	return { description, amountEuro };
 }
 
-function buildVerdict(raw: string, hasImage: boolean): SalBotMessage {
+function softBeat(
+	raw: string,
+	hasImage: boolean,
+	contextHint: "work" | "mixed" | "private" | null,
+): SalBotMessage {
 	const { description, amountEuro } = parseSpend(raw);
-	const assessment = assessDeductibility(description || raw);
+	let hay = (description || raw).trim();
+	if (contextHint === "work" && !/work|buero|büro|laptop|client/i.test(hay)) {
+		hay = `${hay} work`;
+	}
+	if (
+		contextHint === "private" &&
+		!/private|pizza|netflix|restaurant/i.test(hay)
+	) {
+		hay = `${hay} private`;
+	}
+	if (contextHint === "mixed") {
+		hay = `${hay} bahn`;
+	}
+
+	const assessment = assessDeductibility(hay || raw);
 	const amount = amountEuro ?? 40;
 	const impact = roughTaxImpactEuro(amount, assessment.share);
-	const amountLine =
-		amountEuro == null
-			? `No amount parsed — sketched on ${formatEuro(amount)}.`
-			: `Amount: ${formatEuro(amountEuro)}.`;
-	const imageLine = hasImage
-		? " Image attached (stub — caption-only, no OCR)."
-		: "";
+	const win =
+		assessment.verdict === "unlikely" || impact <= 0
+			? null
+			: `+${formatEuro(impact)} this week`;
+
+	const label = description || raw;
+	let text: string;
+	if (assessment.verdict === "likely") {
+		text = win
+			? `${label}? If work → typically absetzbar · ${win}. Want it in your Akte?`
+			: `${label}? If work → typically absetzbar. Want it in your Akte?`;
+	} else if (assessment.verdict === "unlikely") {
+		text = "Looks private — skip, or was it a client meal?";
+	} else {
+		text = win
+			? `Mixed signal — keep the receipt · ${win} if the business share holds. Want it in your Akte?`
+			: "Mixed signal — keep the receipt. Want it in your Akte?";
+	}
+	if (hasImage) {
+		text += " Photo noted (no OCR — caption did the work).";
+	}
 
 	return {
 		id: crypto.randomUUID(),
 		role: "bot",
 		createdAt: new Date().toISOString(),
-		text:
-			[
-				verdictLabel(assessment.verdict) + ".",
-				assessment.why,
-				amountLine,
-				`Rough tax sketch this pulse: ~${formatEuro(impact)}.`,
-				"Rough sketch, not tax advice.",
-			].join(" ") + imageLine,
+		text,
 		verdict: assessment.verdict,
 		why: assessment.why,
 		amountEuro: amount,
@@ -102,7 +132,7 @@ export function meta() {
 		{
 			name: "description",
 			content:
-				"Chat a spend — deductible? + why + rough EUR. Experiment. Does not replace Tax Pulse on /.",
+				"Chat a spend — soft beat + Akte. Experiment. Does not replace Tax Pulse on /.",
 		},
 	];
 }
@@ -115,6 +145,9 @@ export default function SalBotRoute() {
 	const [listening, setListening] = useState(false);
 	const [yearFile, setYearFile] = useState<YearFileState>(emptyYearFile);
 	const [voiceHint, setVoiceHint] = useState<string | null>(null);
+	const [contextHint, setContextHint] = useState<
+		"work" | "mixed" | "private" | null
+	>(null);
 	const listRef = useRef<HTMLDivElement>(null);
 	const recognitionRef = useRef<{ stop: () => void } | null>(null);
 
@@ -152,7 +185,7 @@ export default function SalBotRoute() {
 			text: userText,
 			imageNote: hasImage ? (imageName ?? "image") : undefined,
 		};
-		const botMsg = buildVerdict(trimmed || "receipt photo", hasImage);
+		const botMsg = softBeat(trimmed || "receipt photo", hasImage, contextHint);
 		setMessages((prev) => [...prev, userMsg, botMsg]);
 		setInput("");
 		setImageName(null);
@@ -165,7 +198,7 @@ export default function SalBotRoute() {
 
 	function onSaveToFile(messageId: string) {
 		const target = messages.find((message) => message.id === messageId);
-		if (!target || target.role !== "bot" || !target.description) {
+		if (target?.role !== "bot" || !target.description) {
 			return;
 		}
 		if (target.savedToFile) {
@@ -184,7 +217,7 @@ export default function SalBotRoute() {
 							savedToFile: true,
 							text:
 								message.text +
-								` Saved to dossier. Weekly ${formatEuro(weeklySaveEuro(state.expenses))} / YTD ${formatEuro(ytdImpactEuro(state.expenses))}. Open next week to see the score.`,
+								` In your Akte. Weekly ${formatEuro(weeklySaveEuro(state.expenses))} / YTD ${formatEuro(ytdImpactEuro(state.expenses))}.`,
 						}
 					: message,
 			),
@@ -208,9 +241,8 @@ export default function SalBotRoute() {
 				: undefined;
 
 		if (!SpeechRecognition) {
-			const mock = "coworking day pass 45";
 			setVoiceHint("No mic API — mock transcript loaded. Edit or send.");
-			setInput(mock);
+			setInput("coworking day pass 45");
 			setListening(false);
 			return;
 		}
@@ -222,18 +254,20 @@ export default function SalBotRoute() {
 		}
 
 		const recognition = new SpeechRecognition();
-		recognition.lang = "en-US";
+		recognition.lang = "de-DE";
 		recognition.interimResults = false;
 		recognition.maxAlternatives = 1;
 		recognition.onresult = (event: {
-			results: { [index: number]: { [index: number]: { transcript: string } } };
+			results: {
+				[index: number]: { [index: number]: { transcript: string } };
+			};
 		}) => {
 			const transcript = event.results[0]?.[0]?.transcript ?? "";
 			setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
 			setVoiceHint("Voice captured — tap Send.");
 		};
 		recognition.onerror = () => {
-			setVoiceHint("Voice failed — type it, or tap voice for a mock line.");
+			setVoiceHint("Voice failed — type it, or tap Voice for a mock line.");
 			setListening(false);
 		};
 		recognition.onend = () => {
@@ -252,6 +286,7 @@ export default function SalBotRoute() {
 		setInput("");
 		setImageName(null);
 		setVoiceHint(null);
+		setContextHint(null);
 	}
 
 	return (
@@ -269,18 +304,19 @@ export default function SalBotRoute() {
 					</div>
 					<a
 						href="/"
-						className="shrink-0 font-ui text-caption uppercase tracking-wide underline text-muted-foreground"
+						className="shrink-0 font-ui text-caption uppercase tracking-wide text-muted-foreground underline"
 					>
 						Tax Pulse /
 					</a>
 				</div>
 				<p className="font-body text-caption text-muted-foreground">
-					Useful in November. Honest maybe/no. No nag. Rough sketch, not advice.
+					Useful in November. Soft certainty. No nag. Rough sketch — not tax
+					advice.
 				</p>
 				<div className="flex items-center justify-between gap-2 border border-frame-ink bg-card px-3 py-2">
 					<div>
 						<p className="font-ui text-caption uppercase text-muted-foreground">
-							Dossier week / YTD
+							Akte week / YTD
 						</p>
 						<p className="font-display text-heading-3 tabular-nums">
 							{ready ? `${formatEuro(weekly)} / ${formatEuro(ytd)}` : "—"}
@@ -294,10 +330,10 @@ export default function SalBotRoute() {
 
 			<div
 				ref={listRef}
-				className="flex flex-1 flex-col gap-2 overflow-y-auto px-3 py-4"
 				role="log"
 				aria-label="Chat"
 				aria-live="polite"
+				className="flex flex-1 flex-col gap-2 overflow-y-auto px-3 py-4"
 			>
 				{messages.map((message) => (
 					<article
@@ -308,7 +344,7 @@ export default function SalBotRoute() {
 								: "mr-10 self-start rounded-2xl rounded-bl-sm border border-frame-ink bg-annotation px-3 py-2 text-annotation-foreground shadow-hard"
 						}
 					>
-						<p className="font-body text-body-sm whitespace-pre-wrap">
+						<p className="whitespace-pre-wrap font-body text-body-sm">
 							{message.text}
 						</p>
 						{message.imageNote ? (
@@ -320,15 +356,26 @@ export default function SalBotRoute() {
 						message.verdict &&
 						message.id !== "welcome" ? (
 							<div className="mt-2 flex flex-wrap gap-2">
-								<Button
-									type="button"
-									size="sm"
-									variant={message.savedToFile ? "outline" : "default"}
-									disabled={message.savedToFile}
-									onClick={() => onSaveToFile(message.id)}
-								>
-									{message.savedToFile ? "Saved to dossier" : "Save to file"}
-								</Button>
+								{message.verdict !== "unlikely" || message.savedToFile ? (
+									<Button
+										type="button"
+										size="sm"
+										variant={message.savedToFile ? "outline" : "default"}
+										disabled={message.savedToFile}
+										onClick={() => onSaveToFile(message.id)}
+									>
+										{message.savedToFile ? "In your Akte" : "Save to Akte"}
+									</Button>
+								) : (
+									<Button
+										type="button"
+										size="sm"
+										variant="outline"
+										onClick={() => onSaveToFile(message.id)}
+									>
+										Save anyway
+									</Button>
+								)}
 							</div>
 						) : null}
 					</article>
@@ -337,6 +384,21 @@ export default function SalBotRoute() {
 
 			<div className="sticky bottom-0 space-y-2 border-t border-frame-ink bg-background px-3 py-3">
 				<div className="flex flex-wrap gap-2">
+					{CONTEXT_CHIPS.map((chip) => (
+						<Button
+							key={chip.label}
+							type="button"
+							size="sm"
+							variant={contextHint === chip.hint ? "default" : "outline"}
+							onClick={() =>
+								setContextHint((prev) =>
+									prev === chip.hint ? null : chip.hint,
+								)
+							}
+						>
+							{chip.label}
+						</Button>
+					))}
 					{DEMO_CHIPS.map((chip) => (
 						<Button
 							key={chip.label}
@@ -373,7 +435,7 @@ export default function SalBotRoute() {
 							className="min-h-12 flex-1 border border-frame-ink bg-background px-3 py-2 font-body text-body outline-none focus-visible:border-ring"
 							value={input}
 							onChange={(event) => setInput(event.target.value)}
-							placeholder="coworking 45 — like texting a friend"
+							placeholder="Laptop 899 — or Bahn 12,40 Buero"
 							rows={2}
 						/>
 					</div>
@@ -401,8 +463,8 @@ export default function SalBotRoute() {
 					</Button>
 				</form>
 				<p className="font-body text-caption text-muted-foreground">
-					WhatsApp = docs later. This Telegram-style chat is the live stand-in.
-					Film path for Tax Pulse stays on `/`.
+					Work / Mixed / Private chips + free text. Rough sketch — not tax
+					advice. WhatsApp later. Tax Pulse film path stays on `/`.
 				</p>
 			</div>
 		</main>
