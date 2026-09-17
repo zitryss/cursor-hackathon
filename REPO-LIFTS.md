@@ -1,4 +1,4 @@
-# REPO-LIFTS — patterns borrowed into SalBot (inspiration only)
+﻿# REPO-LIFTS — patterns borrowed into SalBot (inspiration only)
 
 **Read-only lift.** Public repos under [salahuddinuqaili](https://github.com/salahuddinuqaili).  
 No code copied. No secrets. No dependency installs from those trees.  
@@ -25,3 +25,6 @@ SalBot stays on branch `SalBot` only — does not merge to `main` unless Sal say
 - Do not vendor those repos into this hackathon tree.
 - Do not copy env files, tokens, or private case data.
 - Tax Pulse on `/` remains Eugene’s film path; SalBot is the chat experiment on `/salbot`.
+
+## Q&A (Phase-2 — do not build)
+SalBot is the **agent surface** tonight. A Revolut / bank embed of the same pulse is future packaging — not in scope for this hackathon build.

@@ -1,10 +1,17 @@
-# DEMO-SALBOT — 70s film card (SalBot, not Tax Pulse)
+﻿# DEMO-SALBOT — 70s film card (SalBot, not Tax Pulse)
 
 **Film this:** `http://127.0.0.1:5173/salbot` then `http://127.0.0.1:5173/how-we-built`  
 **Do not film `/` as the product.** Tax Pulse on `/` is Eugene’s path. SalBot is the chat experiment.
 
 Locked to live UI on `origin/SalBot` @ `1a8aa2f` (`app/features/salbot/route.tsx`, `app/features/how-we-built/route.tsx`).  
 If the screen disagrees with this card, **the screen wins**.
+
+---
+## ORGANIZER RULE — pitch VIDEO is SILENT
+- **No audio track** in the export (≤2 min). Mute UI / system sounds while filming.
+- **No voiceover in the file.** Sal speaks **live on stage** while the silent video plays.
+- On-screen captions / UI copy are OK. The "Say / Talk track" columns below are **live stage VO**, not burn-in audio.
+- Prefer: Demo Mode one-tap → hold orch strip → optional `/how-we-built`.
 
 ---
 
@@ -26,7 +33,7 @@ Welcome bubble (already on screen before the tap):
 
 ## 70s shot list
 
-| t | Where | Camera | Say (match the pixels) |
+| t | Where | Camera | Live VO (stage only; video stays silent) |
 | --- | --- | --- | --- |
 | **0–8s** | `/salbot` | Hold the header. Do not tap yet. | Eyebrow **SalBot / Taxfix Chat Check**. H1 **Text a spend**. Strip **Live orchestration** with four named seats: **Cursor Agent** `Sapne · $50 · 6c7ecd5→5a99d2b`, **Titans** `plan · docs`, **coder** `PE · Akte · bdb349e→5a99d2b`, **Hackermans** `scope · clock`. Caption: *Useful in November. Soft certainty. No nag.* StBerG line stays on screen — do not skip it. |
 | **8–18s** | `/salbot` | Tap **Demo Mode (one tap)**. Hold the chat. | *No forms. One tap.* Typing indicator **SalBot is typing…** then coworking scrap. Soft yes → **Save to Akte** becomes **In your Akte**. Akte week / YTD ticks. |
@@ -96,3 +103,4 @@ If asked after the 70s: *Typed pulse is the habit; bank, Gmail, and card fill Ta
 | **cursor / Titans / coder** | Frozen for film — no commit during record unless Sal GO |
 
 Upload target: Sal’s 21:00 slot. This card is the shot list, not the video file.
+
