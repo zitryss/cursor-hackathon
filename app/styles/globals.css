@@ -64,6 +64,19 @@ body {
 	--tint-sky: #9ab6c8;
 	--tint-steel: #a5b8c0;
 	--tint-periwinkle: #8c9ae0;
+
+	/* Taxfix brand surface (DESIGN.md) — used by TaxLens and My Tax Plan,
+	   which must read as Taxfix rather than as the retailer around them. */
+	--taxfix-canvas: #fdf8f2;
+	--taxfix-surface: #ffffff;
+	--taxfix-ink: #0c0b0a;
+	--taxfix-muted-ink: #625c55;
+	--taxfix-forest: #154618;
+	--taxfix-green: #36893b;
+	--taxfix-lime: #adee68;
+	--taxfix-lime-hover: #cef5a4;
+	--taxfix-lime-soft: #ecffc7;
+	--taxfix-border: #eae0d7;
 }
 
 .dark {
@@ -151,6 +164,16 @@ body {
 	--color-tint-sky: var(--tint-sky);
 	--color-tint-steel: var(--tint-steel);
 	--color-tint-periwinkle: var(--tint-periwinkle);
+	--color-taxfix-canvas: var(--taxfix-canvas);
+	--color-taxfix-surface: var(--taxfix-surface);
+	--color-taxfix-ink: var(--taxfix-ink);
+	--color-taxfix-muted-ink: var(--taxfix-muted-ink);
+	--color-taxfix-forest: var(--taxfix-forest);
+	--color-taxfix-green: var(--taxfix-green);
+	--color-taxfix-lime: var(--taxfix-lime);
+	--color-taxfix-lime-hover: var(--taxfix-lime-hover);
+	--color-taxfix-lime-soft: var(--taxfix-lime-soft);
+	--color-taxfix-border: var(--taxfix-border);
 	--shadow-hard: 2px 2px 0 var(--frame-ink);
 	--color-sidebar-ring: var(--sidebar-ring);
 	--color-sidebar-border: var(--sidebar-border);

@@ -162,3 +162,8 @@ vite.config.ts.timestamp-*
 /.playwright-cli/
 /test-results/
 /playwright-report/
+
+# WXT (browser extension) generated types and builds
+.wxt
+extension/.output
+web-ext.config.ts

@@ -1,3 +1,9 @@
+# Kept in sync with the `workspaces` field in package.json, which bun reads.
+packages:
+  - "."
+  - "packages/*"
+  - "extension"
+
 engineStrict: true
 nodeVersion: 24.0.0
 strictPeerDependencies: true

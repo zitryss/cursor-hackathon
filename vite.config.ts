@@ -25,7 +25,10 @@ export default defineConfig({
 		},
 	},
 	test: {
-		include: ["app/**/*.{test,spec}.{ts,tsx}"],
+		include: [
+			"app/**/*.{test,spec}.{ts,tsx}",
+			"packages/*/src/**/*.{test,spec}.{ts,tsx}",
+		],
 		restoreMocks: true,
 	},
 });

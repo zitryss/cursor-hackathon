@@ -1,0 +1,412 @@
+/*
+ * TaxLens panel styling.
+ *
+ * Everything is scoped to the shadow root the content script mounts, so the
+ * retailer's stylesheet cannot reach in and TaxLens cannot leak out. Tokens
+ * follow the Taxfix interface system: warm canvas, forest ink, lime accent,
+ * rounded panels, pill actions.
+ */
+
+:host {
+	all: initial;
+}
+
+.taxlens {
+	--tl-canvas: #fdf8f2;
+	--tl-surface: #ffffff;
+	--tl-ink: #0c0b0a;
+	--tl-muted-ink: #625c55;
+	--tl-forest: #154618;
+	--tl-green: #36893b;
+	--tl-lime: #adee68;
+	--tl-lime-hover: #cef5a4;
+	--tl-lime-soft: #ecffc7;
+	--tl-border: #eae0d7;
+	--tl-shadow: 0 18px 48px rgba(12, 11, 10, 0.18);
+
+	position: fixed;
+	z-index: 2147483000;
+	inset-block-end: 24px;
+	inset-inline-end: 24px;
+	inline-size: min(360px, calc(100vw - 32px));
+	max-block-size: calc(100vh - 48px);
+	overflow-y: auto;
+	box-sizing: border-box;
+	font-family: "ABC Rom", "Helvetica Neue", Arial, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: var(--tl-ink);
+	text-align: start;
+}
+
+.taxlens *,
+.taxlens *::before,
+.taxlens *::after {
+	box-sizing: border-box;
+}
+
+.taxlens__trigger {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	inline-size: 100%;
+	padding: 14px 18px;
+	border: 1px solid var(--tl-border);
+	border-radius: 9999px;
+	background: var(--tl-surface);
+	box-shadow: var(--tl-shadow);
+	font: inherit;
+	font-weight: 700;
+	color: var(--tl-forest);
+	text-align: start;
+	cursor: pointer;
+}
+
+.taxlens__trigger:hover {
+	background: var(--tl-lime-soft);
+}
+
+.taxlens__trigger:focus-visible,
+.taxlens__button:focus-visible,
+.taxlens__chip:focus-visible,
+.taxlens__link:focus-visible,
+.taxlens__slider:focus-visible {
+	outline: 2px solid var(--tl-forest);
+	outline-offset: 2px;
+}
+
+.taxlens__mark {
+	display: grid;
+	place-items: center;
+	flex: none;
+	inline-size: 28px;
+	block-size: 28px;
+	border-radius: 9999px;
+	background: var(--tl-lime);
+	color: var(--tl-forest);
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.taxlens__trigger-copy {
+	display: grid;
+	gap: 2px;
+}
+
+.taxlens__trigger-lead {
+	font-size: 12px;
+	font-weight: 400;
+	color: var(--tl-muted-ink);
+}
+
+.taxlens__panel {
+	border: 1px solid var(--tl-border);
+	border-radius: 24px;
+	background: var(--tl-canvas);
+	box-shadow: var(--tl-shadow);
+	overflow: hidden;
+}
+
+.taxlens__header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 16px 20px;
+	background: var(--tl-surface);
+	border-block-end: 1px solid var(--tl-border);
+}
+
+.taxlens__brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--tl-forest);
+}
+
+.taxlens__close {
+	flex: none;
+	inline-size: 32px;
+	block-size: 32px;
+	border: 0;
+	border-radius: 9999px;
+	background: transparent;
+	color: var(--tl-muted-ink);
+	font: inherit;
+	font-size: 18px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.taxlens__close:hover {
+	background: var(--tl-border);
+}
+
+.taxlens__body {
+	display: grid;
+	gap: 16px;
+	padding: 20px;
+}
+
+.taxlens__lede {
+	margin: 0;
+	font-size: 14px;
+	color: var(--tl-muted-ink);
+}
+
+.taxlens__product {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--tl-ink);
+}
+
+.taxlens__field {
+	display: grid;
+	gap: 10px;
+}
+
+.taxlens__label {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 8px;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.taxlens__value {
+	font-size: 20px;
+	font-weight: 700;
+	color: var(--tl-forest);
+	font-variant-numeric: tabular-nums;
+}
+
+.taxlens__slider {
+	inline-size: 100%;
+	margin: 0;
+	accent-color: var(--tl-forest);
+	block-size: 24px;
+	cursor: pointer;
+}
+
+.taxlens__chips {
+	display: flex;
+	gap: 8px;
+}
+
+.taxlens__chip {
+	flex: 1;
+	min-block-size: 36px;
+	padding: 6px 10px;
+	border: 1px solid var(--tl-border);
+	border-radius: 9999px;
+	background: var(--tl-surface);
+	font: inherit;
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--tl-forest);
+	cursor: pointer;
+}
+
+.taxlens__chip:hover {
+	background: var(--tl-lime-soft);
+}
+
+.taxlens__chip[aria-pressed="true"] {
+	background: var(--tl-lime);
+	border-color: var(--tl-lime);
+}
+
+.taxlens__rows {
+	display: grid;
+	gap: 8px;
+	padding: 16px;
+	border-radius: 16px;
+	background: var(--tl-surface);
+	border: 1px solid var(--tl-border);
+}
+
+.taxlens__row {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	font-size: 14px;
+}
+
+.taxlens__row dt {
+	margin: 0;
+	color: var(--tl-muted-ink);
+}
+
+.taxlens__row dd {
+	margin: 0;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.taxlens__headline {
+	display: grid;
+	gap: 4px;
+	padding: 18px;
+	border-radius: 16px;
+	background: var(--tl-lime-soft);
+	border: 1px solid var(--tl-lime);
+	color: var(--tl-forest);
+}
+
+.taxlens__headline-label {
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.taxlens__headline-amount {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	font-size: 32px;
+	font-weight: 900;
+	letter-spacing: -0.02em;
+	font-variant-numeric: tabular-nums;
+}
+
+.taxlens__strike {
+	font-size: 16px;
+	font-weight: 400;
+	text-decoration: line-through;
+	color: var(--tl-muted-ink);
+}
+
+.taxlens__actions {
+	display: grid;
+	gap: 8px;
+}
+
+.taxlens__button {
+	min-block-size: 48px;
+	padding: 12px 24px;
+	border: 1px solid transparent;
+	border-radius: 9999px;
+	font: inherit;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.taxlens__button--primary {
+	background: var(--tl-lime);
+	color: var(--tl-forest);
+}
+
+.taxlens__button--primary:hover {
+	background: var(--tl-lime-hover);
+}
+
+.taxlens__button--secondary {
+	background: var(--tl-surface);
+	border-color: var(--tl-forest);
+	color: var(--tl-forest);
+}
+
+.taxlens__button--secondary:hover {
+	background: var(--tl-lime-soft);
+}
+
+.taxlens__button[disabled] {
+	opacity: 0.6;
+	cursor: default;
+}
+
+.taxlens__note {
+	margin: 0;
+	font-size: 12px;
+	color: var(--tl-muted-ink);
+}
+
+.taxlens__assumptions {
+	border: 1px solid var(--tl-border);
+	border-radius: 16px;
+	background: var(--tl-surface);
+	padding: 12px 16px;
+}
+
+.taxlens__assumptions summary {
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--tl-forest);
+	cursor: pointer;
+}
+
+.taxlens__assumptions dl {
+	display: grid;
+	gap: 6px;
+	margin: 12px 0 0;
+}
+
+.taxlens__formula {
+	margin: 12px 0 0;
+	padding: 10px 12px;
+	border-radius: 8px;
+	background: var(--tl-canvas);
+	font-family: ui-monospace, "SF Mono", Menlo, monospace;
+	font-size: 12px;
+	color: var(--tl-muted-ink);
+	white-space: pre-wrap;
+}
+
+.taxlens__status {
+	display: grid;
+	gap: 6px;
+	padding: 16px;
+	border-radius: 16px;
+	background: var(--tl-forest);
+	color: #ffffff;
+}
+
+.taxlens__status-title {
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.taxlens__status-body {
+	margin: 0;
+	font-size: 13px;
+	opacity: 0.88;
+}
+
+.taxlens__link {
+	color: #ffffff;
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.taxlens__badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 12px;
+	border-radius: 9999px;
+	background: var(--tl-lime);
+	color: var(--tl-forest);
+	font-size: 12px;
+	font-weight: 700;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.taxlens__panel {
+		animation: taxlens-rise 160ms ease-out;
+	}
+}
+
+@keyframes taxlens-rise {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

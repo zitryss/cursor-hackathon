@@ -1,0 +1,11 @@
+{
+	"extends": "./.wxt/tsconfig.json",
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"strict": true,
+		"verbatimModuleSyntax": true,
+		"skipLibCheck": true
+	},
+	"include": [".wxt/wxt.d.ts", "**/*.ts", "**/*.tsx"],
+	"exclude": [".output", ".wxt/types"]
+}
