@@ -274,12 +274,14 @@ export default function YearFilePulseRoute() {
 
 			<footer className="mt-auto border-t border-frame-ink pt-4">
 				<p className="font-ui text-caption uppercase tracking-[0.08em] text-muted-foreground">
-					Built with Cursor + agents
+					Built with Cursor Agent
 				</p>
 				<p className="mt-1 font-body text-body-sm text-muted-foreground">
-					Sal to Hackermans scope to cursor on Sapne; Titans TEAM-PLAN;
-					Shirley/Sam ship. Built with Cursor + agents. One weekly pulse, not a
-					committee.
+					Sapne co-drive · $50 organizer credits ·{" "}
+					<a className="underline" href="/how-we-built">
+						How we built
+					</a>
+					. Tax Pulse weekly pulse — not a committee.
 				</p>
 			</footer>
 		</main>

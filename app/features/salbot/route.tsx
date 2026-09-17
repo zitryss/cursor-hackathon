@@ -2,6 +2,10 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import {
+	addExpenseToSalBotAkte,
+	loadSalBotAkte,
+} from "~/features/salbot/salbot-akte-store";
+import {
 	clearChat,
 	loadChat,
 	type SalBotMessage,
@@ -12,10 +16,6 @@ import {
 	formatEuro,
 	roughTaxImpactEuro,
 } from "~/features/year-file/deductibility";
-import {
-	addExpenseToSalBotAkte,
-	loadSalBotAkte,
-} from "~/features/salbot/salbot-akte-store";
 import {
 	emptyYearFile,
 	weeklySaveEuro,
@@ -477,7 +477,10 @@ export default function SalBotRoute() {
 									setImageName(null);
 									return;
 								}
-								if (file.size > MAX_IMAGE_BYTES || !file.type.startsWith("image/")) {
+								if (
+									file.size > MAX_IMAGE_BYTES ||
+									!file.type.startsWith("image/")
+								) {
 									setImageName(null);
 									event.target.value = "";
 									return;
@@ -492,7 +495,9 @@ export default function SalBotRoute() {
 					</Button>
 				</form>
 				<p className="font-body text-caption text-muted-foreground">
-					<span className="font-ui uppercase tracking-wide">Built with Cursor Agent</span>
+					<span className="font-ui uppercase tracking-wide">
+						Built with Cursor Agent
+					</span>
 					{" — "}
 					Sapne co-drive · $50 credits ·{" "}
 					<a className="underline" href="/how-we-built">

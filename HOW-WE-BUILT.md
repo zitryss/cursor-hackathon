@@ -1,28 +1,38 @@
-# HOW-WE-BUILT (jury orchestration)
+# HOW-WE-BUILT — Cursor lane (jury Multi-agent Orchestration)
 
-Mirrors `TEAM-PLAN/HOW-WE-BUILT.md` with the live Sapne trail.
+## One owner per stage
+| Stage | Owner |
+| --- | --- |
+| Venue capture + veto + pitch video | **Sal** (phone) |
+| Clock, ruthless scope, film decision | **Hackermans** |
+| **Sapne co-drive / Cursor Agent** | **cursor** (this agent) |
+| Hermes Titans Heavy parallel packs | **ivan → Titans** |
+| PE / shippable quality | **coder** |
+| Research / UX bible | **feedback** |
+| Tax Pulse FE/data (human) | Shirley / Sam / Eugene as assigned |
 
-## Pipeline
-1. **Sal** captures challenge + jury criteria from venue (phone)
-2. **Hackermans** cuts ruthless scope: Tax Pulse weekly tax-save pulse
-3. **cursor** co-drives Sal's Cursor on Sapne ($50 organizer credits) — checkout `C:\Users\salahuddin\projects\cursor-hackathon`
-4. **ivan / Titans x6** produce shared `TEAM-PLAN/` + copy/pitch packs in parallel
-5. **Shirley (FE) + Sam (fullstack)** own UI + persist/heuristic; cursor polishes for demo/video
-6. **Sal** films pitch video + presents (veto on submit)
+## Cursor lane (visible contribution)
+Sal’s Cursor on Sapne (`salahuddinuqaili@outlook.com`, **$50 organizer credits**) was co-driven by agent **cursor** under Hackermans.
 
-## Why this scores Multi-agent
-We did not vibe alone — Cursor + Hermes Titans + human lanes, one owner per stage, `TEAM-PLAN/` as shared truth.
+Shipped on `origin/SalBot` (does not replace Tax Pulse film path on `/`):
+| SHA | What cursor owned |
+| --- | --- |
+| `002e4e0` | `/salbot` chat → deductibility experiment (reuse year-file heuristic) |
+| `aae4a07` | Messaging UX: bubbles, voice, Save to Akte, demo chips, persist |
+| `76a4054` | UX bible tone: soft one-beat bubbles, Work/Mixed/Private chips |
+| `299dd88` | Tax Pulse rename + demo-harden (also on year-file-pulse / main merge) |
+
+Support seats (not the Sapne Cursor driver): Titans docs/SCORE, coder PE pass, feedback UX bible.
+
+## What jury should point at
+1. In-app footer on `/salbot` and `/`: **Built with Cursor Agent** (Sapne co-drive)
+2. This file + `TEAM-PLAN/HOW-WE-BUILT.md`
+3. `README-SALBOT.md` + `DEMO-SALBOT.md` (5–8s orchestration shot)
+4. Optional Q&A page: `/how-we-built`
+5. Git history on `SalBot` for the SHAs above
 
 ## Tools
-Cursor Agent/Composer · Hermes Titans Heavy · Grok Bot (Hackermans 1:1)
+Cursor Agent/Composer on Sapne · Hermes Titans Heavy · Grok Bot war-room (Hackermans 1:1)
 
-## Visible trail tonight
-- `TEAM-PLAN/` (Titans) including CLOCK.md + ACCEPTANCE.md
-- Root `HOW-WE-BUILT.md` (this file)
-- In-app footer: Built with Cursor + agents
-- Live demo path: `/` on branch `year-file-pulse`
-
-## Demo seeds (Load demo week)
-1. coworking day pass — 45 EUR (likely)
-2. Bahn to client meeting — 28.50 EUR (maybe)
-3. Netflix — 12.99 EUR (unlikely)
+## Refuse for this lane
+Architecture tours. New product features during freeze. Claiming Titans “wrote SalBot alone.”
