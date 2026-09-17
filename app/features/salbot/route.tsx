@@ -3,8 +3,8 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
 	addExpenseToSalBotAkte,
+	clearSalBotAkte,
 	loadSalBotAkte,
-	saveSalBotAkte,
 } from "~/features/salbot/salbot-akte-store";
 import {
 	clearChat,
@@ -50,6 +50,7 @@ const CONTEXT_CHIPS = [
 	{ label: "Mixed", hint: "mixed" as const },
 	{ label: "Private", hint: "private" as const },
 ];
+const MOCK_VOICE_TEXT = DEMO_SCRIPT[0]?.text ?? "coworking day pass 45";
 
 const ORCH_SEATS = [
 	{ name: "Hackermans", detail: "scope · clock" },
@@ -181,6 +182,7 @@ export default function SalBotRoute() {
 	>(null);
 	const listRef = useRef<HTMLDivElement>(null);
 	const recognitionRef = useRef<{ stop: () => void } | null>(null);
+	const savingRef = useRef(false);
 	const akteRef = useRef<YearFileState>(emptyYearFile());
 	const demoCancelRef = useRef(false);
 
@@ -236,6 +238,9 @@ export default function SalBotRoute() {
 	}
 
 	function saveBotMessage(botMsg: SalBotMessage) {
+		if (savingRef.current) {
+			return;
+		}
 		if (!botMsg.description) {
 			return;
 		}
@@ -255,9 +260,11 @@ export default function SalBotRoute() {
 		if (!result) {
 			return;
 		}
-		akteRef.current = result.state;
-		setYearFile(result.state);
-		setMessages((prev) =>
+		savingRef.current = true;
+		try {
+			akteRef.current = result.state;
+			setYearFile(result.state);
+			setMessages((prev) =>
 			prev.map((message) =>
 				message.id === botMsg.id
 					? {
@@ -269,7 +276,10 @@ export default function SalBotRoute() {
 						}
 					: message,
 			),
-		);
+			);
+		} finally {
+			savingRef.current = false;
+		}
 	}
 
 	function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -286,6 +296,25 @@ export default function SalBotRoute() {
 			return;
 		}
 		saveBotMessage(target);
+	}
+
+
+	function stopMic() {
+		if (recognitionRef.current) {
+			try {
+				recognitionRef.current.stop();
+			} catch {
+				/* already stopped */
+			}
+			recognitionRef.current = null;
+		}
+		setListening(false);
+	}
+
+	function applyVoiceFallback(hint: string) {
+		stopMic();
+		setVoiceHint(hint);
+		setInput((prev) => prev || MOCK_VOICE_TEXT);
 	}
 
 	function onVoice() {
@@ -305,9 +334,7 @@ export default function SalBotRoute() {
 				: undefined;
 
 		if (!SpeechRecognition) {
-			setVoiceHint("Mic API unavailable — mock transcript ready. Tap Send.");
-			setInput("coworking day pass 45");
-			setListening(false);
+			applyVoiceFallback("Mic API unavailable — mock transcript ready. Tap Send.");
 			return;
 		}
 
@@ -332,9 +359,7 @@ export default function SalBotRoute() {
 				setVoiceHint("Voice captured — tap Send.");
 			};
 			recognition.onerror = () => {
-				setVoiceHint("Voice failed — mock loaded instead. Edit or tap Send.");
-				setInput((prev) => prev || "coworking day pass 45");
-				setListening(false);
+				applyVoiceFallback("Voice failed — mock loaded instead. Edit or tap Send.");
 			};
 			recognition.onend = () => {
 				setListening(false);
@@ -345,26 +370,31 @@ export default function SalBotRoute() {
 			setVoiceHint("Listening…");
 			recognition.start();
 		} catch {
-			setVoiceHint("Mic blocked — mock transcript ready. Tap Send.");
-			setInput("coworking day pass 45");
-			setListening(false);
+			applyVoiceFallback("Mic blocked — mock transcript ready. Tap Send.");
 		}
+	}
+
+	function wipeSalBotDemoSurface() {
+		stopMic();
+		clearChat();
+		clearSalBotAkte();
+		const empty = emptyYearFile();
+		akteRef.current = empty;
+		setYearFile(empty);
+		setMessages([WELCOME]);
+		// Canonical write so a stale persist effect cannot resurrect prior chat.
+		saveChat([WELCOME]);
+		setInput("");
+		setImageName(null);
+		setVoiceHint(null);
+		setContextHint(null);
+		setTyping(false);
 	}
 
 	function onResetDemo() {
 		demoCancelRef.current = true;
 		setDemoRunning(false);
-		setTyping(false);
-		clearChat();
-		const empty = emptyYearFile();
-		saveSalBotAkte(empty);
-		akteRef.current = empty;
-		setYearFile(empty);
-		setMessages([WELCOME]);
-		setInput("");
-		setImageName(null);
-		setVoiceHint(null);
-		setContextHint(null);
+		wipeSalBotDemoSurface();
 	}
 
 	async function runDemoMode() {
@@ -372,17 +402,7 @@ export default function SalBotRoute() {
 			return;
 		}
 		demoCancelRef.current = true;
-		clearChat();
-		const empty = emptyYearFile();
-		saveSalBotAkte(empty);
-		akteRef.current = empty;
-		setYearFile(empty);
-		setMessages([WELCOME]);
-		setInput("");
-		setImageName(null);
-		setVoiceHint(null);
-		setContextHint(null);
-		setTyping(false);
+		wipeSalBotDemoSurface();
 		demoCancelRef.current = false;
 		setDemoRunning(true);
 		await sleep(400);
