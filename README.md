@@ -1,5 +1,7 @@
 # cursor-hackathon
 
+**Judge report:** [`JUDGE-REPORT.md`](./JUDGE-REPORT.md) — how we used Cursor, Grok Bot, agents, and merged four humans’ ideas.
+
 Taxfix Cursor Hackathon Berlin — **Tax Pulse** weekly tax-save pulse.
 
 See `TEAM-PLAN/` for shared truth (lanes, demo, score).

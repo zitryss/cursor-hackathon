@@ -1,5 +1,9 @@
 # HOW-WE-BUILT (jury orchestration)
 
+**Judge report (phone): [`JUDGE-REPORT.md`](./JUDGE-REPORT.md)**
+
+TaxPulse team. Film = `feat/taxfix-card-pitch`. Live pulse = `main` `/`. Tools = Cursor + Grok Bot Hackermans + Hermes Titans.
+
 Mirrors `TEAM-PLAN/HOW-WE-BUILT.md` with the live Sapne trail.
 
 ## Pipeline
@@ -20,7 +24,7 @@ Cursor Agent/Composer · Hermes Titans Heavy · Grok Bot (Hackermans 1:1)
 - `TEAM-PLAN/` (Titans) including CLOCK.md + ACCEPTANCE.md
 - Root `HOW-WE-BUILT.md` (this file)
 - In-app footer: Built with Cursor + agents
-- Live demo path: `/` on branch `year-file-pulse`
+- Live demo path: `/` on `main`
 
 ## Demo seeds (Load demo week)
 1. coworking day pass — 45 EUR (likely)
