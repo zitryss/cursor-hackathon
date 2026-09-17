@@ -1,6 +1,6 @@
 # PITCH-WIN — Taxfix Card film (`feat/taxfix-card-pitch`)
 
-**Film vehicle (LOCKED):** timed `/` deck on `feat/taxfix-card-pitch` @ `76b16f4` (Eugene + Cursor). ~120s auto 16:9.  
+**Film vehicle (LOCKED):** timed `/` deck on `feat/taxfix-card-pitch` (Eugene + Cursor). ~120s 16:9.  
 **Do not film SalBot tonight.** SalBot = habit twin (`/pulse` / chat) — Phase-2 story, not this upload.  
 **No SalBot merge. No `win/` branch.** Tweaks stay additive on this tip (honesty/Cursor chrome + docs). Don’t break the 120s timing.
 
@@ -8,7 +8,12 @@
 Pay every day. Do less in April — Taxfix Card keeps/skip spends into a year-round Documents vault so April is a readout.
 
 ## Silent film (the deck IS the film)
-Home `/` auto-runs ~120s: debit-card pay → keep/skip (laptop/chair/coffee) → Documents vault → calendar year → €0→€346 → punchline. Prefer silent export; Sal VO live on stage.
+Home `/` runs the locked ~120s deck: debit-card pay → keep/skip (laptop/chair/coffee) → Documents vault → calendar year → €0→€346 → punchline. If idle, click or press Space once, then do not pause. Silent export; Sal VO live on stage.
+
+## On-screen chrome (additive, not a beat)
+- Honesty: **Taxfix Card · vision** plus footer *Vision pitch — year-round filing while you spend. Not a live card tonight.*
+- Cursor: *Built with Cursor Agent + multi-agent team*
+- Headlines and BEATS durations are unchanged. Punchline remains **Pay every day. Do less in April.**
 
 ## Stage VO spine (~25s — feedback to harden)
 1. Taxes aren’t a March panic — they’re daily pays.  
@@ -21,7 +26,7 @@ Home `/` auto-runs ~120s: debit-card pay → keep/skip (laptop/chair/coffee) →
 ## Branch map (tonight)
 | Branch | Tip | Role |
 |---|---|---|
-| **feat/taxfix-card-pitch** | `76b16f4` (+ additive polish) | **Film** |
+| **feat/taxfix-card-pitch** | this branch (additive polish on Eugene’s deck) | **Film** |
 | main / tatfix/shirley | `b0de437` | Tax Pulse / shared base — not film |
 | SalBot | `1da5b43`… | Habit twin — Phase-2, no merge |
 
