@@ -53,9 +53,9 @@ const CONTEXT_CHIPS = [
 const MOCK_VOICE_TEXT = "Bahn to client meeting 28.50";
 
 const ORCH_SEATS = [
-	{ name: "Cursor Agent", detail: "Sapne · $50 · 6c7ecd5→bdb349e" },
+	{ name: "Cursor Agent", detail: "Sapne · $50 · 6c7ecd5→5a99d2b" },
 	{ name: "Titans", detail: "plan · docs" },
-	{ name: "coder", detail: "PE · Akte · bdb349e" },
+	{ name: "coder", detail: "PE · Akte · bdb349e→5a99d2b" },
 	{ name: "Hackermans", detail: "scope · clock" },
 ] as const;
 
