@@ -1,25 +1,26 @@
-# DEMO (2 minutes) + VIDEO
+# DEMO + VIDEO
 
-## Live click path (use `/`)
-1. Open Year File pulse
-2. Add: `coworking day pass` / `45` → Likely deductible + € sketch
-3. Add: `Bahn to client meeting` / `28.50` → Maybe + keep receipt
-4. Add: `Netflix` / `12.99` → Probably not (honest = clever)
-5. Show confidence up + **€ this week / YTD**
-6. Line: “I’d open this in November to pocket money — not because Taxfix nagged me.”
+**URL:** `/` after `pnpm run dev`  
+**Do not** click Load demo week on camera. Clear localStorage `year-file-pulse-v1` first.
 
-## Spoken script (~110 sec)
-- **0:00 Problem:** Once-a-year panic button; Germany deadline crush then silence.
-- **0:20 Insight:** Help people **save taxes each week** — genuine value, not reminders.
-- **0:35 Demo:** (click path)
-- **1:20 Return loop:** Weekly € save + confidence = voluntary off-season / Q4 opens.
-- **1:35 Orchestration (jury 25%):** Sal phone → Hackermans scope → Cursor on Sapne + Titans plan → Shirley/Sam ship.
-- **1:50 Close:** Year File — taxes year-round, clever not anxious.
+## Seeds (type exactly)
+| # | Description | Amount | Expect |
+| --- | --- | ---: | --- |
+| 1 | coworking day pass | 45 | Likely ~13,50 € |
+| 2 | Bahn to client meeting | 28.50 | Maybe ~4,28 € |
+| 3 | Netflix | 12.99 | Probably not / 0 |
 
-## Pitch VIDEO shot list (upload by 21:00)
-1. Title: Year File — Make Taxes Year Around (3s)
-2. Problem one-liner (5s)
-3. Screen record full click path (45–55s)
-4. Orchestration beat / footer “Built with Cursor + agents” (8s)
-5. End: weekly save + confidence (5s)
-Target ~70s. **Sal uploads. 21:00 miss = cannot present.**
+End hold: Weekly save ~17,78 € · confidence ~64. Linger on honest Netflix no.
+
+## Talk track
+Add. Know. File grows. No nag.
+
+## Video ~70s
+Title → problem → empty Tax Pulse → seed1 → seed2 → seed3 → list+totals → (optional footer Built with Cursor+agents) → freeze. Hard out ~1:10.
+
+## Present 2:00
+Same path live. Read € off screen.  
+Jury ask only (10s): Four humans, named agent seats, Titans in parallel, one product loop.
+
+## Q&A bank (if asked)
+Bank is enrichment; Tax Pulse is the habit. DE AIS = consent + SCA ~90d. TurboTax partners QuickBooks for year-round — same playbook.

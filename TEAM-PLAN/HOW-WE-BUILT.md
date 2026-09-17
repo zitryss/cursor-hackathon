@@ -1,16 +1,11 @@
-# HOW-WE-BUILT (jury orchestration)
+# HOW-WE-BUILT (orchestration)
 
-## Pipeline
-1. **Sal** — challenge + scoring from venue (phone)
-2. **Hackermans** — ruthless scope: Year File weekly tax-save pulse
-3. **cursor** — co-drives **Sal’s** Cursor on Sapne ($50 credits) → `app/features/year-file/` on `/`
-4. **Titans** — shared `TEAM-PLAN/` + pitch/video support
-5. **Shirley + Sam** — FE/fullstack demo-hardening
-6. **Eugene** — laptop support (own Cursor account)
-7. **Sal** — pitch video + present (veto)
+1. Sal — challenge + scoring from venue (phone)
+2. Hackermans — ruthless scope: Tax Pulse weekly pulse
+3. cursor — Sal’s Cursor on Sapne ($50 credits) → `app/features/year-file/` on `/`
+4. Titans — TEAM-PLAN / pitch packs
+5. Shirley + Sam — FE/fullstack when present
+6. Eugene — laptop demo runtime
+7. Sal — video + present
 
-## Why this scores Multi-agent
-One owner per stage. Shared `TEAM-PLAN/` truth. Cursor + Hermes Titans + human builders — not a single solo vibe session.
-
-## Tools
-Cursor Agent/Composer · Hermes Titans Heavy · Grok Bot (Hackermans 1:1 only)
+Tools: Cursor · Hermes Titans · Grok Bot Hackermans 1:1 (not group spam)

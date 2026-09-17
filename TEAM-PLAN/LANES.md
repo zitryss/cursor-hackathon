@@ -1,41 +1,12 @@
-# LANES (optimized for remaining clock)
+# LANES — remaining clock
 
-## Reality check
-Vertical slice is already in `app/features/year-file/` and mounted at `/`.  
-Stop greenfield. Switch to **demo-hardening**.
+| Who | Owns now |
+| --- | --- |
+| **Eugene** | `pnpm run dev` → `/` alive for film + present (own Cursor account) |
+| **Sal** | Record ~70s video, upload by 21:00, present 21:10, veto |
+| **Shirley / Sam** | No new features; room presence counts for ≥4; fix only if `/` is broken |
+| **Hackermans** | Clock, refuse list, pitch card |
+| **cursor (Sapne)** | Frozen — no commit without Sal GO |
+| **Titans / feedback** | Idle unless asked |
 
-## Shirley (FE) — OWN next
-- [ ] Fix any mojibake / broken symbols in UI copy
-- [ ] Make the three-step demo obvious on a laptop screen for video
-- [ ] Tone pass: clever / in control — not anxious
-- [ ] Optional: one sticky “Weekly save” callout above the fold
-- [ ] **Do not** add new pages or photo upload unless done by 20:15
-
-## Sam (fullstack) — OWN next
-- [ ] Confirm `pnpm run dev` → `/` works on demo machine
-- [ ] Add 1-click “Load demo week” OR document seed expenses (see README)
-- [ ] Label estimates: “rough sketch, not tax advice” visible once
-- [ ] Keep localStorage Year File stable across refresh
-- [ ] **Do not** migrate to server DB tonight unless already working
-
-## Eugene — SUPPORT
-- Unblock Shirley/Sam on laptop tooling
-- Stay on **his** Cursor account (Sal’s $50 stays on Sapne)
-
-## Sal — OWN (critical path)
-- [ ] Confirm ≥4 humans present for prizes
-- [ ] Rehearse DEMO.md once
-- [ ] Screen-record pitch video
-- [ ] **Upload by 21:00 sharp** (miss = no slot)
-- [ ] Present at 21:10
-
-## cursor (Sapne) — OWN
-- Polish only on Sal’s Cursor session
-- Keep HOW-WE-BUILT + in-app “Built with Cursor + agents” footer
-- No publish/demo without Sal
-
-## Hackermans — OWN
-- Clock pings · refuse scope creep · final pitch lines
-
-## Conflict rule
-One demo path on `/`. If two people edit the same file, Shirley owns UI, Sam owns `deductibility.ts` / store.
+Conflict: one demo path on `/`. Shirley=UI, Sam=heuristic/store only if hotfixed.

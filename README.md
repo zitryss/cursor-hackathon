@@ -1,6 +1,6 @@
 # cursor-hackathon
 
-Taxfix Cursor Hackathon Berlin — **Year File** weekly tax-save pulse.
+Taxfix Cursor Hackathon Berlin — **Tax Pulse** weekly tax-save pulse.
 
 See `TEAM-PLAN/` for shared truth (lanes, demo, score).
 
@@ -9,7 +9,7 @@ See `TEAM-PLAN/` for shared truth (lanes, demo, score).
 1. Open `/` (index is the pulse).
 2. Add this week’s expense (try `coworking day pass` + `45`).
 3. Instant readout: deductible? why? **€ save this week / YTD**.
-4. Year File + filing confidence grows.
+4. Tax Pulse + filing confidence grows.
 5. Return reason: open next week to see the score — no nags.
 
 Counter scaffold remains at `/counter`.
