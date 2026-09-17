@@ -1,37 +1,51 @@
-import { type FormEvent, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import {
+	clearChat,
+	loadChat,
+	type SalBotMessage,
+	saveChat,
+} from "~/features/salbot/salbot-store";
+import {
 	assessDeductibility,
-	type DeductibilityVerdict,
 	formatEuro,
 	roughTaxImpactEuro,
 	verdictLabel,
 } from "~/features/year-file/deductibility";
+import {
+	addExpenseToYearFile,
+	emptyYearFile,
+	loadYearFile,
+	weeklySaveEuro,
+	type YearFileState,
+	ytdImpactEuro,
+} from "~/features/year-file/year-file-store";
 
-type ChatRole = "user" | "bot";
+const DEMO_CHIPS = [
+	{ label: "coworking 45", text: "coworking day pass 45" },
+	{ label: "Bahn 28.50", text: "Bahn to client meeting 28.50" },
+	{ label: "Netflix 12.99", text: "Netflix 12.99" },
+] as const;
 
-interface ChatMessage {
-	id: string;
-	role: ChatRole;
-	text: string;
-	verdict?: DeductibilityVerdict;
-	impactEuro?: number;
-	imageNote?: string;
-}
+const WELCOME: SalBotMessage = {
+	id: "welcome",
+	role: "bot",
+	createdAt: new Date(0).toISOString(),
+	text: "Taxfix in chat. Voice or text a spend — like you already text friends. ~20s: deductible? + why + rough EUR. Honest maybe/no. No nag.",
+};
 
 function parseSpend(raw: string): {
 	description: string;
 	amountEuro: number | null;
 } {
 	const trimmed = raw.trim();
-	// Match trailing or embedded amounts: 45, 28.50, 12,99, EUR 45, €45
 	const amountMatch = trimmed.match(
 		/(?:eur|€)?\s*(\d+(?:[.,]\d{1,2})?)\s*(?:eur|€)?/i,
 	);
 	let amountEuro: number | null = null;
 	let description = trimmed;
-	if (amountMatch && amountMatch[1]) {
+	if (amountMatch?.[1]) {
 		amountEuro = Number(amountMatch[1].replace(",", "."));
 		if (!Number.isFinite(amountEuro) || amountEuro <= 0) {
 			amountEuro = null;
@@ -48,168 +62,366 @@ function parseSpend(raw: string): {
 	return { description, amountEuro };
 }
 
-function botReply(raw: string, hasImage: boolean): ChatMessage {
+function buildVerdict(raw: string, hasImage: boolean): SalBotMessage {
 	const { description, amountEuro } = parseSpend(raw);
 	const assessment = assessDeductibility(description || raw);
 	const amount = amountEuro ?? 40;
 	const impact = roughTaxImpactEuro(amount, assessment.share);
-	const amountLabel =
+	const amountLine =
 		amountEuro == null
-			? `No amount parsed — sketched as ${formatEuro(amount)} for the rough EUR impact.`
-			: `Amount read: ${formatEuro(amountEuro)}.`;
+			? `No amount parsed — sketched on ${formatEuro(amount)}.`
+			: `Amount: ${formatEuro(amountEuro)}.`;
 	const imageLine = hasImage
-		? " Image noted (caption-only for this demo — no OCR)."
+		? " Image attached (stub — caption-only, no OCR)."
 		: "";
-
-	const text = [
-		verdictLabel(assessment.verdict),
-		assessment.why,
-		amountLabel,
-		`Rough tax sketch: ~${formatEuro(impact)} (not tax advice).`,
-		"Telegram-shaped flow: paste spend text here; WhatsApp needs a Business API later — see README-SALBOT.md.",
-	].join(" ");
 
 	return {
 		id: crypto.randomUUID(),
 		role: "bot",
-		text: text + imageLine,
+		createdAt: new Date().toISOString(),
+		text:
+			[
+				verdictLabel(assessment.verdict) + ".",
+				assessment.why,
+				amountLine,
+				`Rough tax sketch this pulse: ~${formatEuro(impact)}.`,
+				"Rough sketch, not tax advice.",
+			].join(" ") + imageLine,
 		verdict: assessment.verdict,
+		why: assessment.why,
+		amountEuro: amount,
 		impactEuro: impact,
+		description: description || raw,
 		imageNote: hasImage ? "caption-only" : undefined,
 	};
 }
 
 export function meta() {
 	return [
-		{ title: "SalBot — chat deductibility (experiment)" },
+		{ title: "SalBot / Taxfix Chat Check" },
 		{
 			name: "description",
 			content:
-				"Sal experiment: chat a spend, get deductible? + why + rough EUR. Does not replace Tax Pulse film path.",
+				"Chat a spend — deductible? + why + rough EUR. Experiment. Does not replace Tax Pulse on /.",
 		},
 	];
 }
 
 export default function SalBotRoute() {
+	const [ready, setReady] = useState(false);
+	const [messages, setMessages] = useState<SalBotMessage[]>([WELCOME]);
 	const [input, setInput] = useState("");
 	const [imageName, setImageName] = useState<string | null>(null);
-	const [messages, setMessages] = useState<ChatMessage[]>(() => [
-		{
-			id: "welcome",
-			role: "bot",
-			text: "SalBot experiment. Describe a spend (optional amount). I reuse the Tax Pulse deductibility heuristic. This does not replace the / Tax Pulse film path.",
-		},
-	]);
+	const [listening, setListening] = useState(false);
+	const [yearFile, setYearFile] = useState<YearFileState>(emptyYearFile);
+	const [voiceHint, setVoiceHint] = useState<string | null>(null);
+	const listRef = useRef<HTMLDivElement>(null);
+	const recognitionRef = useRef<{ stop: () => void } | null>(null);
 
-	const pendingImage = useMemo(() => imageName, [imageName]);
+	useEffect(() => {
+		const stored = loadChat();
+		setMessages(stored.length > 0 ? stored : [WELCOME]);
+		setYearFile(loadYearFile());
+		setReady(true);
+	}, []);
+
+	useEffect(() => {
+		if (!ready) {
+			return;
+		}
+		saveChat(messages);
+		listRef.current?.scrollTo({
+			top: listRef.current.scrollHeight,
+			behavior: "smooth",
+		});
+	}, [messages, ready]);
+
+	const weekly = weeklySaveEuro(yearFile.expenses);
+	const ytd = ytdImpactEuro(yearFile.expenses);
+
+	function sendText(raw: string, hasImage: boolean) {
+		const trimmed = raw.trim();
+		if (!trimmed && !hasImage) {
+			return;
+		}
+		const userText = trimmed || "(image — add a caption next time)";
+		const userMsg: SalBotMessage = {
+			id: crypto.randomUUID(),
+			role: "user",
+			createdAt: new Date().toISOString(),
+			text: userText,
+			imageNote: hasImage ? (imageName ?? "image") : undefined,
+		};
+		const botMsg = buildVerdict(trimmed || "receipt photo", hasImage);
+		setMessages((prev) => [...prev, userMsg, botMsg]);
+		setInput("");
+		setImageName(null);
+	}
 
 	function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
-		const trimmed = input.trim();
-		if (!trimmed && !pendingImage) {
+		sendText(input, Boolean(imageName));
+	}
+
+	function onSaveToFile(messageId: string) {
+		const target = messages.find((message) => message.id === messageId);
+		if (!target || target.role !== "bot" || !target.description) {
+			return;
+		}
+		if (target.savedToFile) {
+			return;
+		}
+		const { state } = addExpenseToYearFile(yearFile, {
+			description: target.description,
+			amountEuro: target.amountEuro ?? 40,
+		});
+		setYearFile(state);
+		setMessages((prev) =>
+			prev.map((message) =>
+				message.id === messageId
+					? {
+							...message,
+							savedToFile: true,
+							text:
+								message.text +
+								` Saved to dossier. Weekly ${formatEuro(weeklySaveEuro(state.expenses))} / YTD ${formatEuro(ytdImpactEuro(state.expenses))}. Open next week to see the score.`,
+						}
+					: message,
+			),
+		);
+	}
+
+	function onVoice() {
+		const SpeechRecognition =
+			typeof window !== "undefined"
+				? (
+						window as unknown as {
+							SpeechRecognition?: new () => SpeechRecognitionLike;
+							webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+						}
+					).SpeechRecognition ||
+					(
+						window as unknown as {
+							webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+						}
+					).webkitSpeechRecognition
+				: undefined;
+
+		if (!SpeechRecognition) {
+			const mock = "coworking day pass 45";
+			setVoiceHint("No mic API — mock transcript loaded. Edit or send.");
+			setInput(mock);
+			setListening(false);
 			return;
 		}
 
-		const userText = trimmed || "(image only — add a caption next time)";
-		const userMsg: ChatMessage = {
-			id: crypto.randomUUID(),
-			role: "user",
-			text: userText,
-			imageNote: pendingImage ?? undefined,
+		if (listening && recognitionRef.current) {
+			recognitionRef.current.stop();
+			setListening(false);
+			return;
+		}
+
+		const recognition = new SpeechRecognition();
+		recognition.lang = "en-US";
+		recognition.interimResults = false;
+		recognition.maxAlternatives = 1;
+		recognition.onresult = (event: {
+			results: { [index: number]: { [index: number]: { transcript: string } } };
+		}) => {
+			const transcript = event.results[0]?.[0]?.transcript ?? "";
+			setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
+			setVoiceHint("Voice captured — tap Send.");
 		};
-		const reply = botReply(trimmed || "receipt photo", Boolean(pendingImage));
-		setMessages((prev) => [...prev, userMsg, reply]);
+		recognition.onerror = () => {
+			setVoiceHint("Voice failed — type it, or tap voice for a mock line.");
+			setListening(false);
+		};
+		recognition.onend = () => {
+			setListening(false);
+			recognitionRef.current = null;
+		};
+		recognitionRef.current = recognition;
+		setListening(true);
+		setVoiceHint("Listening…");
+		recognition.start();
+	}
+
+	function onResetDemo() {
+		clearChat();
+		setMessages([WELCOME]);
 		setInput("");
 		setImageName(null);
+		setVoiceHint(null);
 	}
 
 	return (
 		<main
 			id="main-content"
-			className="mx-auto flex min-h-dvh w-full max-w-lg flex-col bg-background px-4 py-6 text-foreground"
+			className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background text-foreground"
 		>
-			<header className="space-y-2 border-b border-frame-ink pb-4">
-				<p className="font-ui text-caption uppercase tracking-[0.12em] text-muted-foreground">
-					SalBot · experiment branch
-				</p>
-				<h1 className="font-display text-heading-1">Chat a spend</h1>
-				<p className="font-body text-body-sm text-muted-foreground">
-					Text in → deductible? + why + rough EUR. Optional image stub
-					(caption-only). Does not replace Tax Pulse on `/`.
-				</p>
-				<p className="font-body text-caption text-muted-foreground">
-					<a className="underline" href="/">
-						← Tax Pulse film path
+			<header className="sticky top-0 z-10 space-y-2 border-b border-frame-ink bg-background/95 px-4 py-3 backdrop-blur">
+				<div className="flex items-start justify-between gap-2">
+					<div>
+						<p className="font-ui text-caption uppercase tracking-[0.12em] text-muted-foreground">
+							SalBot / Taxfix Chat Check
+						</p>
+						<h1 className="font-display text-heading-2">Text a spend</h1>
+					</div>
+					<a
+						href="/"
+						className="shrink-0 font-ui text-caption uppercase tracking-wide underline text-muted-foreground"
+					>
+						Tax Pulse /
 					</a>
+				</div>
+				<p className="font-body text-caption text-muted-foreground">
+					Useful in November. Honest maybe/no. No nag. Rough sketch, not advice.
 				</p>
+				<div className="flex items-center justify-between gap-2 border border-frame-ink bg-card px-3 py-2">
+					<div>
+						<p className="font-ui text-caption uppercase text-muted-foreground">
+							Dossier week / YTD
+						</p>
+						<p className="font-display text-heading-3 tabular-nums">
+							{ready ? `${formatEuro(weekly)} / ${formatEuro(ytd)}` : "—"}
+						</p>
+					</div>
+					<p className="font-body text-caption text-muted-foreground">
+						conf {ready ? yearFile.confidence : "—"}/100
+					</p>
+				</div>
 			</header>
 
-			<section
+			<div
+				ref={listRef}
+				className="flex flex-1 flex-col gap-2 overflow-y-auto px-3 py-4"
+				role="log"
 				aria-label="Chat"
-				className="mt-4 flex flex-1 flex-col gap-3 overflow-y-auto"
+				aria-live="polite"
 			>
 				{messages.map((message) => (
-					<div
+					<article
 						key={message.id}
 						className={
 							message.role === "user"
-								? "ml-8 border border-frame-ink bg-card p-3 shadow-hard"
-								: "mr-8 border border-frame-ink bg-annotation p-3 text-annotation-foreground shadow-hard"
+								? "ml-10 self-end rounded-2xl rounded-br-sm border border-frame-ink bg-card px-3 py-2 shadow-hard"
+								: "mr-10 self-start rounded-2xl rounded-bl-sm border border-frame-ink bg-annotation px-3 py-2 text-annotation-foreground shadow-hard"
 						}
 					>
-						<p className="font-ui text-caption uppercase tracking-wide opacity-80">
-							{message.role === "user" ? "You" : "SalBot"}
-						</p>
-						<p className="mt-1 font-body text-body-sm whitespace-pre-wrap">
+						<p className="font-body text-body-sm whitespace-pre-wrap">
 							{message.text}
 						</p>
 						{message.imageNote ? (
 							<p className="mt-1 font-body text-caption opacity-80">
-								attachment: {message.imageNote}
+								attach: {message.imageNote}
 							</p>
 						) : null}
-					</div>
+						{message.role === "bot" &&
+						message.verdict &&
+						message.id !== "welcome" ? (
+							<div className="mt-2 flex flex-wrap gap-2">
+								<Button
+									type="button"
+									size="sm"
+									variant={message.savedToFile ? "outline" : "default"}
+									disabled={message.savedToFile}
+									onClick={() => onSaveToFile(message.id)}
+								>
+									{message.savedToFile ? "Saved to dossier" : "Save to file"}
+								</Button>
+							</div>
+						) : null}
+					</article>
 				))}
-			</section>
+			</div>
 
-			<form
-				className="mt-4 space-y-2 border-t border-frame-ink pt-4"
-				onSubmit={onSubmit}
-			>
-				<label className="block space-y-1">
-					<span className="font-ui text-caption uppercase tracking-wide">
-						Message (Telegram-style)
-					</span>
-					<textarea
-						className="min-h-24 w-full border border-frame-ink bg-background px-3 py-2 font-body text-body outline-none focus-visible:border-ring"
-						value={input}
-						onChange={(event) => setInput(event.target.value)}
-						placeholder="coworking day pass 45"
-					/>
-				</label>
+			<div className="sticky bottom-0 space-y-2 border-t border-frame-ink bg-background px-3 py-3">
+				<div className="flex flex-wrap gap-2">
+					{DEMO_CHIPS.map((chip) => (
+						<Button
+							key={chip.label}
+							type="button"
+							size="sm"
+							variant="outline"
+							onClick={() => sendText(chip.text, false)}
+						>
+							{chip.label}
+						</Button>
+					))}
+					<Button
+						type="button"
+						size="sm"
+						variant="outline"
+						onClick={onResetDemo}
+					>
+						Reset chat
+					</Button>
+				</div>
 
-				<label className="block space-y-1">
-					<span className="font-ui text-caption uppercase tracking-wide">
-						Image stub (optional)
-					</span>
-					<input
-						type="file"
-						accept="image/*"
-						className="block w-full font-body text-body-sm"
-						onChange={(event) => {
-							const file = event.target.files?.[0];
-							setImageName(file ? file.name : null);
-						}}
-					/>
-					<p className="font-body text-caption text-muted-foreground">
-						Upload accepted as stub only — no OCR. Caption the spend in text.
-					</p>
-				</label>
-
-				<Button type="submit" className="w-full" size="lg">
-					Send
-				</Button>
-			</form>
+				<form className="space-y-2" onSubmit={onSubmit}>
+					<div className="flex gap-2">
+						<Button
+							type="button"
+							variant={listening ? "default" : "outline"}
+							size="lg"
+							aria-pressed={listening}
+							onClick={onVoice}
+						>
+							{listening ? "Stop" : "Voice"}
+						</Button>
+						<textarea
+							className="min-h-12 flex-1 border border-frame-ink bg-background px-3 py-2 font-body text-body outline-none focus-visible:border-ring"
+							value={input}
+							onChange={(event) => setInput(event.target.value)}
+							placeholder="coworking 45 — like texting a friend"
+							rows={2}
+						/>
+					</div>
+					{voiceHint ? (
+						<p className="font-body text-caption text-muted-foreground">
+							{voiceHint}
+						</p>
+					) : null}
+					<label className="block space-y-1">
+						<span className="font-ui text-caption uppercase tracking-wide text-muted-foreground">
+							Image stub (optional)
+						</span>
+						<input
+							type="file"
+							accept="image/*"
+							className="block w-full font-body text-caption"
+							onChange={(event) => {
+								const file = event.target.files?.[0];
+								setImageName(file ? file.name : null);
+							}}
+						/>
+					</label>
+					<Button type="submit" className="w-full" size="lg">
+						Send
+					</Button>
+				</form>
+				<p className="font-body text-caption text-muted-foreground">
+					WhatsApp = docs later. This Telegram-style chat is the live stand-in.
+					Film path for Tax Pulse stays on `/`.
+				</p>
+			</div>
 		</main>
 	);
+}
+
+interface SpeechRecognitionLike {
+	lang: string;
+	interimResults: boolean;
+	maxAlternatives: number;
+	onresult:
+		| ((event: {
+				results: {
+					[index: number]: { [index: number]: { transcript: string } };
+				};
+		  }) => void)
+		| null;
+	onerror: (() => void) | null;
+	onend: (() => void) | null;
+	start: () => void;
+	stop: () => void;
 }
