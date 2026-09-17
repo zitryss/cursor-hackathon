@@ -229,7 +229,8 @@ and ABC Rom Condensed Heavy font families. The visible design combines expressiv
 condensed headlines, pill actions, rounded content blocks, natural photography,
 and spacious light sections.
 
-This document adapts that direction for this application's mobile-first UI. It is
+This document adapts that direction for a 16:9 pitch deck; the phone is a mock
+inside the slide, not the primary layout. It is
 not an official Taxfix brand manual. Type sizes, spacing, interaction states,
 muted text, input borders, warning, and error colors are project choices. The
 front matter defines the target tokens; it does not describe the current CSS.

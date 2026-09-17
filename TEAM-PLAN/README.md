@@ -1,7 +1,9 @@
 # TEAM-PLAN — Tax Pulse (OPTIMIZED 19:28 Berlin)
 
+**Film tonight:** Taxfix Card **vision** pitch on `feat/taxfix-card-pitch`. Record silent `/` (~120s 16:9). Tax Pulse remains at `/pulse`. See `PITCH-WIN.md`.
+
 **Challenge:** Make Taxes Year Around  
-**Product (ONLY):** Tax Pulse — weekly tax-save pulse on `/`  
+**Product (ONLY):** Tax Pulse — weekly tax-save pulse on `/pulse` (card on `/` is vision, not a live issued card)  
 **Status:** MVP live (typed add → verdict + € → Tax Pulse + confidence). Demo-harden done. **Build freeze — film path.**
 
 ## One sentence
@@ -32,4 +34,4 @@ Sal (PM/video/present) · Eugene (laptop `pnpm dev`, own Cursor) · Shirley · S
 Hackermans (clock/scope) · cursor Sapne (freeze) · Titans idle · feedback (Q&A ammo done)
 
 ## Rule
-Ship `/`. Film three seeds. Upload by 21:00. No second product.
+Film silent `/` (~120s vision pitch). Keep `/pulse` working. Upload by 21:00. No SalBot. No live card claim.
