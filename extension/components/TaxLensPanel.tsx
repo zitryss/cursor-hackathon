@@ -213,45 +213,47 @@ export function TaxLensPanel({
 						</div>
 					</dl>
 
-					<div className="taxlens__headline">
-						<span className="taxlens__headline-label">
-							Potential tax-adjusted cost
-						</span>
-						<span className="taxlens__headline-amount">
-							{formatEuro(estimate.taxAdjustedCost)}
-							{estimate.estimatedTaxBenefit > 0 ? (
-								<span className="taxlens__strike">
-									{formatEuro(product.price)}
-								</span>
-							) : null}
-						</span>
-					</div>
+					<div className="taxlens__sticky">
+						<div className="taxlens__headline">
+							<span className="taxlens__headline-label">
+								Potential tax-adjusted cost
+							</span>
+							<span className="taxlens__headline-amount">
+								{formatEuro(estimate.taxAdjustedCost)}
+								{estimate.estimatedTaxBenefit > 0 ? (
+									<span className="taxlens__strike">
+										{formatEuro(product.price)}
+									</span>
+								) : null}
+							</span>
+						</div>
 
-					<div className="taxlens__actions">
-						{saved ? (
-							<button
-								type="button"
-								className={`taxlens__button ${
-									reminderOn
-										? "taxlens__button--secondary"
-										: "taxlens__button--primary"
-								}`}
-								onClick={onToggleReminder}
-							>
-								{reminderOn
-									? "Invoice reminder activated ✓"
-									: "Remind me to save the invoice"}
-							</button>
-						) : (
-							<button
-								type="button"
-								className="taxlens__button taxlens__button--primary"
-								onClick={onSave}
-								disabled={busy}
-							>
-								{busy ? "Saving…" : "Save to Taxfix"}
-							</button>
-						)}
+						<div className="taxlens__actions">
+							{saved ? (
+								<button
+									type="button"
+									className={`taxlens__button ${
+										reminderOn
+											? "taxlens__button--secondary"
+											: "taxlens__button--primary"
+									}`}
+									onClick={onToggleReminder}
+								>
+									{reminderOn
+										? "Invoice reminder activated ✓"
+										: "Remind me to save the invoice"}
+								</button>
+							) : (
+								<button
+									type="button"
+									className="taxlens__button taxlens__button--primary"
+									onClick={onSave}
+									disabled={busy}
+								>
+									{busy ? "Saving…" : "Save to Taxfix"}
+								</button>
+							)}
+						</div>
 					</div>
 
 					<details className="taxlens__assumptions">
