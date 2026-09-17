@@ -3,6 +3,7 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
 	addExpenseToSalBotAkte,
+	clearSalBotAkte,
 	loadSalBotAkte,
 } from "~/features/salbot/salbot-akte-store";
 import {
@@ -157,6 +158,7 @@ export default function SalBotRoute() {
 	>(null);
 	const listRef = useRef<HTMLDivElement>(null);
 	const recognitionRef = useRef<{ stop: () => void } | null>(null);
+	const savingRef = useRef(false);
 
 	useEffect(() => {
 		const stored = loadChat();
@@ -204,6 +206,9 @@ export default function SalBotRoute() {
 	}
 
 	function onSaveToFile(messageId: string) {
+		if (savingRef.current) {
+			return;
+		}
 		const target = messages.find((message) => message.id === messageId);
 		if (target?.role !== "bot" || !target.description) {
 			return;
@@ -227,6 +232,8 @@ export default function SalBotRoute() {
 		if (!result) {
 			return;
 		}
+		savingRef.current = true;
+		try {
 		const { state } = result;
 		setYearFile(state);
 		setMessages((prev) =>
@@ -242,6 +249,9 @@ export default function SalBotRoute() {
 					: message,
 			),
 		);
+		} finally {
+			savingRef.current = false;
+		}
 	}
 
 	function onVoice() {
@@ -301,12 +311,21 @@ export default function SalBotRoute() {
 	}
 
 	function onResetDemo() {
+		// Clear both SalBot keys before state updates so the persist effect
+		// cannot resurrect a stale chat snapshot, and Akte week/YTD resets too.
 		clearChat();
+		clearSalBotAkte();
 		setMessages([WELCOME]);
+		setYearFile(emptyYearFile());
 		setInput("");
 		setImageName(null);
 		setVoiceHint(null);
 		setContextHint(null);
+		if (recognitionRef.current) {
+			recognitionRef.current.stop();
+			recognitionRef.current = null;
+		}
+		setListening(false);
 	}
 
 	return (

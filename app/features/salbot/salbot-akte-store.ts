@@ -42,8 +42,19 @@ export function saveSalBotAkte(state: YearFileState): void {
 	window.localStorage.setItem(SALBOT_AKTE_KEY, JSON.stringify(state));
 }
 
+export function clearSalBotAkte(): void {
+	if (typeof window === "undefined") {
+		return;
+	}
+	window.localStorage.removeItem(SALBOT_AKTE_KEY);
+}
+
+/**
+ * Persist one Akte row. Always merges from localStorage (not React state)
+ * so rapid Saves cannot clobber each other via a stale yearFile closure.
+ */
 export function addExpenseToSalBotAkte(
-	state: YearFileState,
+	_state: YearFileState,
 	input: { description: string; amountEuro: number; id?: string },
 ): { state: YearFileState; expense: YearFileExpense } | null {
 	const description = input.description.trim().slice(0, MAX_DESCRIPTION_LEN);
@@ -56,10 +67,12 @@ export function addExpenseToSalBotAkte(
 	) {
 		return null;
 	}
-	if (input.id && state.expenses.some((expense) => expense.id === input.id)) {
-		const existing = state.expenses.find((expense) => expense.id === input.id);
+
+	const base = loadSalBotAkte();
+	if (input.id) {
+		const existing = base.expenses.find((expense) => expense.id === input.id);
 		if (existing) {
-			return { state, expense: existing };
+			return { state: base, expense: existing };
 		}
 	}
 
@@ -74,7 +87,7 @@ export function addExpenseToSalBotAkte(
 		impactEuro: roughTaxImpactEuro(amountEuro, assessment.share),
 	};
 
-	const expenses = [expense, ...state.expenses];
+	const expenses = [expense, ...base.expenses];
 	const next: YearFileState = {
 		expenses,
 		confidence: computeConfidence(expenses.length),

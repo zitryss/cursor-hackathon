@@ -53,3 +53,11 @@ Persistent `NOT_ADVICE` copy in header + footer:
 - Real OCR / WhatsApp
 - Server auth / sync
 - Merging to `main`
+
+## Demo reset / race (reliability pass)
+
+- **Stale React Akte state:** `addExpenseToSalBotAkte` always merges from `localStorage` (`salbot-akte-v1`), not the React `yearFile` closure — rapid Saves cannot drop prior rows.
+- **Save mutex:** `savingRef` blocks overlapping Save clicks while state updates flush.
+- **Reset Demo:** clears `salbot-chat-v1` **and** `salbot-akte-v1`, resets in-memory Akte, stops voice recognition — week/YTD and chat both return to empty demo.
+- **Still isolated:** SalBot never reads/writes `year-file-pulse-v1`.
+
