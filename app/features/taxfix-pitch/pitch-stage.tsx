@@ -1,5 +1,9 @@
 import { PhoneApp, PhoneChrome } from "~/features/taxfix-pitch/phone";
-import type { PitchFrame } from "~/features/taxfix-pitch/pitch-timeline";
+import {
+	PITCH_CREDIT,
+	PITCH_HONESTY,
+	type PitchFrame,
+} from "~/features/taxfix-pitch/pitch-timeline";
 import type { PlaybackStatus } from "~/features/taxfix-pitch/use-pitch-playback";
 
 export function PitchStage({
@@ -28,7 +32,7 @@ export function PitchStage({
 				}
 			/>
 			<div className="pitch-copy">
-				<p className="pitch-kicker">Taxfix Card</p>
+				<p className="pitch-kicker">Taxfix Card · vision</p>
 				<h1>{frame.beat.headline}</h1>
 				<p className="pitch-body">{frame.beat.body}</p>
 			</div>
@@ -37,6 +41,11 @@ export function PitchStage({
 					<PhoneApp frame={frame} />
 				</PhoneChrome>
 			</div>
+			<p className="pitch-credit">
+				<span>{PITCH_HONESTY}</span>
+				<span aria-hidden="true"> · </span>
+				<span>{PITCH_CREDIT}</span>
+			</p>
 			{status === "idle" ? (
 				<p className="pitch-start-hint">Click or press Space to start</p>
 			) : null}

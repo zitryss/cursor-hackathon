@@ -9,7 +9,7 @@ export function meta() {
 		{
 			name: "description",
 			content:
-				"A two-minute pitch: Taxfix debit card detects deductibles as Maya spends.",
+				"A two-minute vision pitch: Taxfix Card files while you spend. Not a live issued card.",
 		},
 	];
 }

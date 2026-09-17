@@ -4,7 +4,7 @@
 - Reminders, nudges, push, streaks, badges, **mascot, points, gamification**
 - Fake urgency / “don’t forget” / notification theatre
 - Isolated new folder / second app
-- In-app payments / Taxfix credit card
+- In-app payments / Taxfix credit card as **tonight’s live product** (vision pitch on `/` is allowed; do not claim the card is issued)
 - Gmail / email mining / “full mailbox access” as the demo
 - Bank connect / open banking / PSD2 AIS as the demo
 - Background-only (never open Taxfix)

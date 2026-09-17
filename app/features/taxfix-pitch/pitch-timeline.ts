@@ -12,6 +12,12 @@ export const MONEY = {
 
 export const PUNCHLINE = "Pay every day. Do less in April.";
 
+/** Chrome only — do not put this on a beat; film narration is the headlines. */
+export const PITCH_HONESTY =
+	"Vision pitch — year-round filing while you spend. Not a live card tonight.";
+
+export const PITCH_CREDIT = "Built with Cursor Agent + multi-agent team";
+
 export type BeatId =
 	| "problem"
 	| "card"
