@@ -1,0 +1,11 @@
+{
+	"name": "Tax Pulse (React Router + SQLite)",
+	"install": "bash .cursor/install.sh",
+	"terminals": [
+		{
+			"name": "dev",
+			"command": "export NVM_DIR=\"$HOME/.nvm\"; . \"$NVM_DIR/nvm.sh\" --no-use; export PATH=\"$(dirname \"$(nvm which 24)\"):$PATH\"; corepack pnpm run dev --host 127.0.0.1 --port 5173 --strictPort"
+		}
+	],
+	"ports": [5173]
+}
