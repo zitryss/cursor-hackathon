@@ -32,3 +32,11 @@ Follow `TEAM-PLAN/DEMO.md`. Upload by **21:00** Berlin. Sal owns upload + presen
 ## Agent trail
 
 See [`HOW-WE-BUILT.md`](./HOW-WE-BUILT.md) and `TEAM-PLAN/HOW-WE-BUILT.md`.
+
+## Presentation recording
+
+[Watch or download the presentation recording (MOV, 2 min 10 sec)](./public/presentation/pitch-recording.mov)
+
+## Our team
+
+![The team at the Taxfix Cursor Hackathon in Berlin](./public/presentation/IMG_5930.JPG)
