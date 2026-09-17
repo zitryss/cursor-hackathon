@@ -1,40 +1,35 @@
-﻿# TEAM-PLAN — Year File (Taxfix Hackathon)
+# TEAM-PLAN — Tax Pulse (OPTIMIZED 19:28 Berlin)
 
 **Challenge:** Make Taxes Year Around  
-**Product (only):** Year File — weekly tax-save pulse  
-**Repo:** `zitryss/cursor-hackathon`  
-**Hard gates:** freeze ~20:40 · **pitch VIDEO 21:00 sharp** · present 21:10 (2 min, max 3)
+**Product (ONLY):** Tax Pulse — weekly tax-save pulse on `/`  
+**Status:** MVP live (typed add → verdict + € → Tax Pulse + confidence). Demo-harden done. **Build freeze — film path.**
 
-## One-sentence pitch
-Taxfix becomes the place you open **every week** to pocket tax savings — not a July panic button.
+## One sentence
+Taxfix becomes the place you open each week to pocket tax savings — not a July panic button.
 
-## Demo path (must work live)
-1. Add this week’s expense (text; photo optional)
-2. Instant clever readout: deductible? why? **€ save this week / YTD**
-3. Saves to Year File
-4. Weekly save total + filing confidence grows → reason to return next week
+## Loop
+1. Add expense (description + amount) ~10–20s — **no photo required**
+2. Instant: deductible? why? € this pulse / week / YTD
+3. Saved to Tax Pulse
+4. Weekly € + filing confidence = voluntary return (not a nag)
 
-## Refuse
-Reminders · nudges · fake urgency · streaks · notification theatre · filing-only features · architecture tours
+## Hard gates
+| Gate | Time | Owner |
+| --- | --- | --- |
+| Feature freeze | now / was 20:15 | No new capabilities |
+| UI freeze | ~20:40 | Stop polish |
+| **Pitch VIDEO** | **21:00 sharp** | Sal — miss = no present |
+| Present | 21:10 / 2 min (max 3) | Sal; organizers play uploaded video on stage |
 
-## Jury (25% each)
-Innovation · Multi-agent Orchestration · taxfix scope · Demo quality
+**Upload:** https://drive.google.com/drive/folders/11tEGUcsyr81ekHdTS71JxpCLfzaLZFYb  
+**Filename:** `TeamName_ProjectName.mp4`  
+Also need: team name, members, one-liner, repo `https://github.com/zitryss/cursor-hackathon`, how Cursor was used.
 
-## Humans
-| Person | Role tonight |
-| --- | --- |
-| **Sal** | Phone PM / veto / 2-min pitch / owns pitch-video upload |
-| **Eugene** | Laptop Cursor (own account) — build support as needed |
-| **Shirley** | FE — pulse UI, Year File, confidence meter |
-| **Sam** | Fullstack — expense → answer → persist → weekly totals |
+## Humans (≥4 prizes)
+Sal (PM/video/present) · Eugene (laptop `pnpm dev`, own Cursor) · Shirley · Sam
 
 ## Agents
-| Agent | Role |
-| --- | --- |
-| **Hackermans** | Clock, ruthless scope, lanes, demo narrative (Sal 1:1 only) |
-| **cursor** | Sapne co-drive on **Sal’s** Cursor ($50 credits) |
-| **ivan → Titans** | Parallel copy, rubric, pitch/video pack |
-| coder / feedback | On-call only |
+Hackermans (clock/scope) · cursor Sapne (freeze) · Titans idle · feedback (Q&A ammo done)
 
-## Sync
-This folder is shared truth. If it conflicts with chat, **TEAM-PLAN wins** until Sal vetoes.
+## Rule
+Ship `/`. Film three seeds. Upload by 21:00. No second product.
