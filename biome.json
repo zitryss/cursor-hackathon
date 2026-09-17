@@ -7,12 +7,12 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": ["**", "!.agents", "!skills-lock.json"]
+		"includes": ["**", "!.agents", "!skills-lock.json", "!Grok Bot Test"]
 	},
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
-		"includes": ["**", "!drizzle/**/snapshot.json"]
+		"includes": ["**"]
 	},
 	"linter": {
 		"enabled": true,
