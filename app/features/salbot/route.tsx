@@ -128,7 +128,8 @@ function softBeat(
 			? `${label}? If work → typically absetzbar · ${win}. Want it in your Akte?`
 			: `${label}? If work → typically absetzbar. Want it in your Akte?`;
 	} else if (assessment.verdict === "unlikely") {
-		text = "Looks private — skip, or was it a client meal?";
+		text =
+			"Looks private — honest no for the Akte (Netflix/pizza stay out). Client meal? Say so.";
 	} else {
 		text = win
 			? `Mixed signal — keep the receipt · ${win} if the business share holds. Want it in your Akte?`
@@ -586,14 +587,19 @@ export default function SalBotRoute() {
 										{message.savedToFile ? "In your Akte" : "Save to Akte"}
 									</Button>
 								) : (
-									<Button
-										type="button"
-										size="sm"
-										variant="outline"
-										onClick={() => onSaveToFile(message.id)}
-									>
-										Save anyway
-									</Button>
+									<>
+										<span className="inline-flex items-center border border-frame-ink bg-background px-2 py-1 font-ui text-caption uppercase tracking-wide text-muted-foreground">
+											Refusal kept the Akte honest
+										</span>
+										<Button
+											type="button"
+											size="sm"
+											variant="outline"
+											onClick={() => onSaveToFile(message.id)}
+										>
+											Save anyway
+										</Button>
+									</>
 								)}
 							</div>
 						) : null}

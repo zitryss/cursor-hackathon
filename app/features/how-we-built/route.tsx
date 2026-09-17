@@ -23,12 +23,17 @@ export default function HowWeBuiltRoute() {
 				Winning Cursor demos show <strong>one clear loop</strong> and{" "}
 				<strong>visible seats</strong> — not feature sprawl.
 			</p>
+			<p className="font-body text-body-sm text-muted-foreground">
+				Soft pitch (fovea / bar-loop): a confident wrong euro is a failure; a
+				refusal is success. Hard gates + human sign-off beat sprawl.
+			</p>
 
 			<section className="space-y-2 border border-frame-ink bg-card p-4">
 				<h2 className="font-ui text-heading-2">Parallel seats</h2>
 				<ul className="space-y-2 font-body text-body-sm">
 					<li>
-						<strong>Sal</strong> — phone capture, veto, pitch video
+						<strong>Sal</strong> — phone capture, veto, pitch video (tether
+						story)
 					</li>
 					<li>
 						<strong>Hackermans</strong> — ruthless scope + clock
@@ -69,8 +74,8 @@ export default function HowWeBuiltRoute() {
 						Tax Pulse <code>/</code> film path untouched
 					</li>
 					<li>
-						SHAs: 002e4e0 · aae4a07 · 76a4054 · 6c7ecd5 (world) · bdb349e (PE) ·
-						tip 5a99d2b
+						Pattern lifts documented in <code>REPO-LIFTS.md</code> (inspiration
+						only)
 					</li>
 				</ul>
 			</section>
