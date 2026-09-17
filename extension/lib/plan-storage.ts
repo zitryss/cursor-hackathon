@@ -75,8 +75,38 @@ export async function clearPlan(): Promise<void> {
  * Where the Taxfix app lives. The real extension deep-links into the app
  * (`taxfix://tax-plan/opportunity/<id>`); the prototype opens the web
  * prototype of the same screen.
+ *
+ * On a local demo the app is whichever port Vite settled on, so follow the
+ * page we are already running in rather than assuming 5173.
  */
-export const TAX_PLAN_APP_URL = "http://localhost:5173/tax-plan";
+export function taxPlanAppUrl(): string {
+	if (
+		typeof location !== "undefined" &&
+		/^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+	) {
+		return `${location.origin}/tax-plan`;
+	}
+	return "http://localhost:5173/tax-plan";
+}
+
+/**
+ * The popup runs on the extension's own origin, so it cannot follow the page.
+ * Fall back to the shop a saved item came from, which pins the demo to the
+ * port the app is actually serving on.
+ */
+export function taxPlanUrlFor(opportunities: readonly Opportunity[]): string {
+	for (const opportunity of opportunities) {
+		try {
+			const origin = new URL(opportunity.productUrl).origin;
+			if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+				return `${origin}/tax-plan`;
+			}
+		} catch {
+			// Ignore an unparseable URL and keep looking.
+		}
+	}
+	return taxPlanAppUrl();
+}
 
 /**
  * Hand a captured item to the app. The payload carries only what the user
@@ -101,5 +131,5 @@ export function taxPlanDeepLink(opportunity: Opportunity): string {
 		.replace(/\+/g, "-")
 		.replace(/\//g, "_")
 		.replace(/=+$/, "");
-	return `${TAX_PLAN_APP_URL}?add=${encoded}`;
+	return `${taxPlanAppUrl()}?add=${encoded}`;
 }

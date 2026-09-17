@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
 	clearPlan,
 	readPlan,
-	TAX_PLAN_APP_URL,
+	taxPlanUrlFor,
 	updatePlanStatus,
 	uploadPlanInvoice,
 	watchPlan,
@@ -201,7 +201,7 @@ export function PopupApp() {
 			<footer className="popup__footer">
 				<a
 					className="popup__button popup__button--primary popup__button--link"
-					href={TAX_PLAN_APP_URL}
+					href={taxPlanUrlFor(plan.opportunities)}
 					target="_blank"
 					rel="noreferrer"
 				>
