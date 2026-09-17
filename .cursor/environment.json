@@ -4,7 +4,7 @@
 	"terminals": [
 		{
 			"name": "dev",
-			"command": "export NVM_DIR=\"$HOME/.nvm\"; . \"$NVM_DIR/nvm.sh\"; nvm use default >/dev/null; corepack pnpm run dev --host 127.0.0.1 --port 5173 --strictPort"
+			"command": "export NVM_DIR=\"$HOME/.nvm\"; . \"$NVM_DIR/nvm.sh\" --no-use; export PATH=\"$(dirname \"$(nvm which 24)\"):$PATH\"; corepack pnpm run dev --host 127.0.0.1 --port 5173 --strictPort"
 		}
 	],
 	"ports": [5173]
