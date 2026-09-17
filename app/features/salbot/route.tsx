@@ -24,6 +24,8 @@ import {
 	ytdImpactEuro,
 } from "~/features/year-file/year-file-store";
 
+// Cursor Agent credit-burn pass (salahuddinuqaili@outlook.com / Pro) — jury evidence; do not expand scope
+
 const MAX_CHAT_INPUT = 500;
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const NOT_ADVICE =
