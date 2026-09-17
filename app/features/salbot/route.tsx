@@ -157,6 +157,29 @@ function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function filmVerdictShort(verdict: SalBotMessage["verdict"]): string {
+	if (verdict === "likely") {
+		return "Likely";
+	}
+	if (verdict === "unlikely") {
+		return "No";
+	}
+	if (verdict === "maybe") {
+		return "Maybe";
+	}
+	return "Maybe";
+}
+
+function verdictChipClass(verdict: SalBotMessage["verdict"]): string {
+	if (verdict === "likely") {
+		return "border-frame-ink bg-[var(--tint-lime)] text-foreground";
+	}
+	if (verdict === "unlikely") {
+		return "border-frame-ink bg-[var(--tint-salmon)] text-foreground";
+	}
+	return "border-frame-ink bg-accent text-accent-foreground";
+}
+
 export function meta() {
 	return [
 		{ title: "SalBot / Taxfix Chat Check" },
@@ -179,6 +202,8 @@ export default function SalBotRoute() {
 	const [typing, setTyping] = useState(false);
 	const [demoRunning, setDemoRunning] = useState(false);
 	const [speechAvailable, setSpeechAvailable] = useState(true);
+	const [phoneFrame, setPhoneFrame] = useState(true);
+	const [filmCaptions, setFilmCaptions] = useState(true);
 	const [contextHint, setContextHint] = useState<
 		"work" | "mixed" | "private" | null
 	>(null);
@@ -212,6 +237,18 @@ export default function SalBotRoute() {
 		const akte = loadSalBotAkte();
 		akteRef.current = akte;
 		setYearFile(akte);
+		try {
+			const framePref = window.localStorage.getItem("salbot-phone-frame");
+			if (framePref === "0") {
+				setPhoneFrame(false);
+			}
+			const capPref = window.localStorage.getItem("salbot-film-captions");
+			if (capPref === "0") {
+				setFilmCaptions(false);
+			}
+		} catch {
+			/* ignore */
+		}
 		setReady(true);
 	}, []);
 
@@ -470,82 +507,149 @@ export default function SalBotRoute() {
 		setDemoRunning(false);
 	}
 
-	return (
+	const filmQuiet = demoRunning;
+
+	const chatShell = (
 		<main
 			id="main-content"
-			className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background text-foreground"
+			className={
+				phoneFrame
+					? "flex h-[min(844px,92dvh)] w-full flex-col overflow-hidden bg-background text-foreground"
+					: "mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background text-foreground"
+			}
 		>
-			<header className="sticky top-0 z-10 space-y-2 border-b border-frame-ink bg-background/95 px-4 py-3 backdrop-blur">
+			<header className="sticky top-0 z-10 space-y-2 border-b border-frame-ink bg-background/95 px-3 pb-3 pt-2 backdrop-blur">
 				<div className="flex items-start justify-between gap-2">
 					<div>
-						<p className="font-ui text-caption uppercase tracking-[0.12em] text-muted-foreground">
+						<p className="font-ui text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
 							SalBot / Taxfix Chat Check
 						</p>
-						<h1 className="font-display text-heading-2">Text a spend</h1>
+						<h1 className="font-display text-heading-1 leading-none">
+							Text a spend
+						</h1>
 					</div>
-					<a
-						href="/"
-						className="shrink-0 font-ui text-caption uppercase tracking-wide text-muted-foreground underline"
-					>
-						Tax Pulse /
-					</a>
-				</div>
-
-				<section
-					aria-label="Live orchestration"
-					className="border border-frame-ink bg-card px-2 py-2"
-				>
-					<div className="mb-1 flex items-center justify-between gap-2">
-						<p className="font-ui text-caption uppercase tracking-wide text-muted-foreground">
-							Live orchestration
-						</p>
-						<a
-							className="font-ui text-caption uppercase underline"
-							href="/how-we-built"
-						>
-							How we built
-						</a>
-					</div>
-					<ul className="grid grid-cols-2 gap-1">
-						{ORCH_SEATS.map((seat) => (
-							<li
-								key={seat.name}
-								className="border border-frame-ink/40 px-2 py-1"
+					<div className="flex shrink-0 flex-col items-end gap-1">
+						{!filmQuiet ? (
+							<a
+								href="/"
+								className="font-ui text-[10px] uppercase tracking-wide text-muted-foreground underline"
 							>
-								<p className="font-ui text-caption font-bold">{seat.name}</p>
-								<p className="font-body text-[10px] text-muted-foreground">
-									{seat.detail}
-								</p>
-							</li>
-						))}
-					</ul>
-				</section>
+								Tax Pulse /
+							</a>
+						) : null}
+						<Button
+							type="button"
+							size="sm"
+							variant={phoneFrame ? "default" : "outline"}
+							aria-pressed={phoneFrame}
+							onClick={() => {
+								setPhoneFrame((prev) => {
+									const next = !prev;
+									try {
+										window.localStorage.setItem(
+											"salbot-phone-frame",
+											next ? "1" : "0",
+										);
+									} catch {
+										/* ignore */
+									}
+									return next;
+								});
+							}}
+						>
+							{phoneFrame ? "Phone frame on" : "Phone frame off"}
+						</Button>
+					</div>
+				</div>
 
-				<p className="font-body text-caption text-muted-foreground">
-					Useful in November. Soft certainty. No nag. {NOT_ADVICE}
-				</p>
-				<div className="flex items-center justify-between gap-2 border border-frame-ink bg-card px-3 py-2">
+				{!filmQuiet ? (
+					<section
+						aria-label="Live orchestration"
+						className="border border-frame-ink bg-card px-2 py-1.5"
+					>
+						<div className="mb-1 flex items-center justify-between gap-2">
+							<p className="font-ui text-[10px] uppercase tracking-wide text-muted-foreground">
+								Live orchestration
+							</p>
+							<a
+								className="font-ui text-[10px] uppercase underline"
+								href="/how-we-built"
+							>
+								How we built
+							</a>
+						</div>
+						<ul className="flex flex-wrap gap-1">
+							{ORCH_SEATS.map((seat) => (
+								<li
+									key={seat.name}
+									className="border border-frame-ink/50 bg-background px-1.5 py-0.5"
+								>
+									<span className="font-ui text-[10px] font-bold">
+										{seat.name}
+									</span>
+									<span className="ml-1 font-body text-[9px] text-muted-foreground">
+										{seat.detail}
+									</span>
+								</li>
+							))}
+						</ul>
+					</section>
+				) : (
+					<p className="font-ui text-[10px] uppercase tracking-wide text-muted-foreground">
+						Demo Mode · silent film ·{" "}
+						<a className="underline" href="/how-we-built">
+							seats
+						</a>
+					</p>
+				)}
+
+				{!filmQuiet ? (
+					<p className="font-body text-caption text-muted-foreground line-clamp-2">
+						Useful in November. Soft certainty. No nag. {NOT_ADVICE}
+					</p>
+				) : null}
+
+				{/* Sticky weekly € — camera-readable */}
+				<div className="flex items-end justify-between gap-3 border-2 border-frame-ink bg-card px-3 py-2.5 shadow-sm">
 					<div>
-						<p className="font-ui text-caption uppercase text-muted-foreground">
-							Akte week / YTD
+						<p className="font-ui text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+							Akte week
 						</p>
-						<p className="font-display text-heading-3 tabular-nums">
-							{ready ? `${formatEuro(weekly)} / ${formatEuro(ytd)}` : "—"}
+						<p className="font-display text-display tabular-nums leading-none">
+							{ready ? formatEuro(weekly) : "—"}
 						</p>
 					</div>
-					<p className="font-body text-caption text-muted-foreground">
-						conf {ready ? yearFile.confidence : "—"}/100
-					</p>
+					<div className="text-right">
+						<p className="font-ui text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+							YTD
+						</p>
+						<p className="font-display text-heading-1 tabular-nums leading-none">
+							{ready ? formatEuro(ytd) : "—"}
+						</p>
+						<p className="mt-0.5 font-body text-[10px] text-muted-foreground">
+							conf {ready ? yearFile.confidence : "—"}/100
+						</p>
+					</div>
 				</div>
+
 				<Button
 					type="button"
-					className="w-full"
+					className="w-full border-2 border-frame-ink bg-accent text-accent-foreground shadow-sm hover:bg-accent/90"
 					size="lg"
 					disabled={demoRunning}
 					onClick={() => void runDemoMode()}
 				>
 					{demoRunning ? "Demo running…" : "Demo Mode (one tap)"}
 				</Button>
+
+				{filmCaptions && filmQuiet ? (
+					<p
+						aria-live="polite"
+						className="border border-frame-ink bg-[var(--tint-sky)] px-2 py-1 text-center font-ui text-[11px] font-bold uppercase tracking-wide text-foreground"
+					>
+						Silent film — Sal VO live on stage
+					</p>
+				) : null}
 			</header>
 
 			<div
@@ -553,18 +657,32 @@ export default function SalBotRoute() {
 				role="log"
 				aria-label="Chat"
 				aria-live="polite"
-				className="flex flex-1 flex-col gap-2 overflow-y-auto px-3 py-4"
+				className="flex flex-1 flex-col gap-3 overflow-y-auto px-3 py-4"
 			>
 				{messages.map((message) => (
 					<article
 						key={message.id}
 						className={
 							message.role === "user"
-								? "ml-10 self-end rounded-2xl rounded-br-sm border border-frame-ink bg-card px-3 py-2 shadow-hard"
-								: "mr-10 self-start rounded-2xl rounded-bl-sm border border-frame-ink bg-annotation px-3 py-2 text-annotation-foreground shadow-hard"
+								? "ml-8 self-end rounded-2xl rounded-br-md border border-frame-ink bg-card px-3 py-2.5 shadow-sm"
+								: "mr-8 self-start rounded-2xl rounded-bl-md border border-frame-ink bg-annotation px-3 py-2.5 text-annotation-foreground shadow-sm"
 						}
 					>
-						<p className="whitespace-pre-wrap font-body text-body-sm">
+						{message.role === "bot" &&
+						message.verdict &&
+						message.id !== "welcome" ? (
+							<span
+								className={`mb-1.5 inline-flex border px-1.5 py-0.5 font-ui text-[10px] font-bold uppercase tracking-wide ${verdictChipClass(message.verdict)}`}
+							>
+								{filmVerdictShort(message.verdict)}
+								{typeof message.impactEuro === "number" &&
+								message.verdict !== "unlikely" &&
+								message.impactEuro > 0
+									? ` · +${formatEuro(message.impactEuro)}`
+									: ""}
+							</span>
+						) : null}
+						<p className="whitespace-pre-wrap font-body text-body-sm leading-snug">
 							{message.text}
 						</p>
 						{message.imageNote ? (
@@ -606,50 +724,85 @@ export default function SalBotRoute() {
 					</article>
 				))}
 				{typing ? (
-					<p className="mr-10 self-start rounded-2xl border border-frame-ink bg-annotation px-3 py-2 font-body text-caption text-annotation-foreground">
+					<p className="mr-8 self-start rounded-2xl border border-frame-ink bg-annotation px-3 py-2 font-body text-caption text-annotation-foreground shadow-sm">
 						SalBot is typing…
 					</p>
 				) : null}
 			</div>
 
 			<div className="sticky bottom-0 space-y-2 border-t border-frame-ink bg-background px-3 py-3">
-				<div className="flex flex-wrap gap-2">
-					{CONTEXT_CHIPS.map((chip) => (
+				{!filmQuiet ? (
+					<div className="flex flex-wrap gap-2">
+						{CONTEXT_CHIPS.map((chip) => (
+							<Button
+								key={chip.label}
+								type="button"
+								size="sm"
+								variant={contextHint === chip.hint ? "default" : "outline"}
+								onClick={() =>
+									setContextHint((prev) =>
+										prev === chip.hint ? null : chip.hint,
+									)
+								}
+							>
+								{chip.label}
+							</Button>
+						))}
+						{DEMO_CHIPS.map((chip) => (
+							<Button
+								key={chip.label}
+								type="button"
+								size="sm"
+								variant="outline"
+								disabled={demoRunning}
+								onClick={() => sendText(chip.text, false)}
+							>
+								{chip.label}
+							</Button>
+						))}
 						<Button
-							key={chip.label}
-							type="button"
-							size="sm"
-							variant={contextHint === chip.hint ? "default" : "outline"}
-							onClick={() =>
-								setContextHint((prev) =>
-									prev === chip.hint ? null : chip.hint,
-								)
-							}
-						>
-							{chip.label}
-						</Button>
-					))}
-					{DEMO_CHIPS.map((chip) => (
-						<Button
-							key={chip.label}
 							type="button"
 							size="sm"
 							variant="outline"
-							disabled={demoRunning}
-							onClick={() => sendText(chip.text, false)}
+							onClick={onResetDemo}
 						>
-							{chip.label}
+							Reset chat
 						</Button>
-					))}
-					<Button
-						type="button"
-						size="sm"
-						variant="outline"
-						onClick={onResetDemo}
-					>
-						Reset chat
-					</Button>
-				</div>
+						<Button
+							type="button"
+							size="sm"
+							variant={filmCaptions ? "default" : "outline"}
+							aria-pressed={filmCaptions}
+							onClick={() => {
+								setFilmCaptions((prev) => {
+									const next = !prev;
+									try {
+										window.localStorage.setItem(
+											"salbot-film-captions",
+											next ? "1" : "0",
+										);
+									} catch {
+										/* ignore */
+									}
+									return next;
+								});
+							}}
+						>
+							{filmCaptions ? "Captions on" : "Captions off"}
+						</Button>
+					</div>
+				) : (
+					<div className="flex justify-end">
+						<Button
+							type="button"
+							size="sm"
+							variant="outline"
+							onClick={onResetDemo}
+						>
+							Reset chat
+						</Button>
+					</div>
+				)}
 
 				<form className="space-y-2" onSubmit={onSubmit}>
 					<div className="flex gap-2">
@@ -691,55 +844,91 @@ export default function SalBotRoute() {
 							{voiceHint}
 						</p>
 					) : null}
-					<label className="block space-y-1">
-						<span className="font-ui text-caption uppercase tracking-wide text-muted-foreground">
-							Image stub (optional)
-						</span>
-						<input
-							type="file"
-							accept="image/*"
-							className="block w-full font-body text-caption"
+					{!filmQuiet ? (
+						<label className="block space-y-1">
+							<span className="font-ui text-caption uppercase tracking-wide text-muted-foreground">
+								Image stub (optional)
+							</span>
+							<input
+								type="file"
+								accept="image/*"
+								className="block w-full font-body text-caption"
+								disabled={demoRunning}
+								onChange={(event) => {
+									const file = event.target.files?.[0];
+									if (!file) {
+										setImageName(null);
+										return;
+									}
+									if (
+										file.size > MAX_IMAGE_BYTES ||
+										!file.type.startsWith("image/")
+									) {
+										setImageName(null);
+										event.target.value = "";
+										return;
+									}
+									setImageName(file.name.slice(0, 120));
+								}}
+							/>
+						</label>
+					) : null}
+					{!filmQuiet ? (
+						<Button
+							type="submit"
+							className="w-full"
+							size="lg"
 							disabled={demoRunning}
-							onChange={(event) => {
-								const file = event.target.files?.[0];
-								if (!file) {
-									setImageName(null);
-									return;
-								}
-								if (
-									file.size > MAX_IMAGE_BYTES ||
-									!file.type.startsWith("image/")
-								) {
-									setImageName(null);
-									event.target.value = "";
-									return;
-								}
-								setImageName(file.name.slice(0, 120));
-							}}
-						/>
-					</label>
-					<Button
-						type="submit"
-						className="w-full"
-						size="lg"
-						disabled={demoRunning}
-					>
-						Send
-					</Button>
+						>
+							Send
+						</Button>
+					) : null}
 				</form>
-				<p className="font-body text-caption text-muted-foreground">
-					<span className="font-ui uppercase tracking-wide">
-						Built with Cursor Agent
-					</span>
-					{" — "}
-					Sapne co-drive · $50 credits ·{" "}
-					<a className="underline" href="/how-we-built">
-						How we built
-					</a>
-					. {NOT_ADVICE} Tax Pulse stays on `/`.
-				</p>
+				{!filmQuiet ? (
+					<p className="font-body text-[10px] leading-snug text-muted-foreground">
+						<span className="font-ui uppercase tracking-wide">
+							Built with Cursor Agent
+						</span>
+						{" — "}
+						Sapne · $50 ·{" "}
+						<a className="underline" href="/how-we-built">
+							How we built
+						</a>
+						. {NOT_ADVICE}
+					</p>
+				) : null}
 			</div>
 		</main>
+	);
+
+	if (!phoneFrame) {
+		return chatShell;
+	}
+
+	return (
+		<div className="flex min-h-dvh items-center justify-center bg-[#141414] px-3 py-4">
+			<section
+				aria-label="Phone film frame"
+				className="relative w-full max-w-[390px] overflow-hidden rounded-[2.4rem] border-[10px] border-[#0a0a0a] bg-[#0a0a0a] shadow-2xl"
+			>
+				{/* Dynamic Island / status */}
+				<div className="flex items-center justify-between bg-background px-5 pb-1 pt-3 text-[11px] font-semibold text-foreground">
+					<span className="tabular-nums">9:41</span>
+					<div
+						aria-hidden
+						className="mx-auto h-6 w-24 rounded-full bg-[#0a0a0a]"
+					/>
+					<span className="tabular-nums">100%</span>
+				</div>
+				{chatShell}
+				<div className="flex justify-center bg-background pb-2 pt-1">
+					<div
+						aria-hidden
+						className="h-1.5 w-28 rounded-full bg-frame-ink/40"
+					/>
+				</div>
+			</section>
+		</div>
 	);
 }
 

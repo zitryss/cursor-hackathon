@@ -1,4 +1,4 @@
-﻿# DEMO-SALBOT (≤70s) — jury one-loop
+# DEMO-SALBOT (≤70s) — jury one-loop
 
 **URL:** `/salbot` · branch `SalBot`  
 **Do not** film Tax Pulse `/` unless intentional (Eugene path).
@@ -10,6 +10,7 @@
 - Live VO script lives with Sal (stage), not in the MP4.
 
 ## Path (pixels only)
+0. Leave **Phone frame on** (header toggle) for silent film bezel.
 1. Open `/salbot`
 2. Tap **Demo Mode (one tap)** — zero typing
 3. Watch: coworking → Bahn → Netflix → Akte week/YTD moves (~1s beats)
