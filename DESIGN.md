@@ -1,577 +1,496 @@
 ---
 version: alpha
-name: Hardframe Interface System
-description: A compact interface language built from charcoal page frames, paper and deep-gray surfaces, vivid flat annotations, tinted content bands, heavy sans-serif headings, serif reading text, square controls, thin rules, and hard-edged depth.
+name: Taxfix-inspired Interface System
+description: A welcoming, confident interface with lime and forest green, warm light surfaces, bold condensed headings, clear sans-serif reading text, pill actions, rounded panels, and generous space.
 
 colors:
-  primary: "#25241f"
-  on-primary: "#f8f5ed"
-  canvas: "#f1eee5"
-  surface: "#f8f5ed"
-  ink: "#25241f"
-  muted-ink: "#47443e"
-  frame-ink: "#302f2a"
-  callout: "#f44250"
-  on-callout: "#1c1b18"
-  annotation: "#fcc20f"
-  on-annotation: "#1c1b18"
-  stripe: "#6a26a4"
-  link: "#0000ee"
-  tint-olive: "#8e8a25"
-  tint-sage: "#b3bd95"
-  tint-salmon: "#d77a7a"
-  tint-peach: "#e6915d"
-  tint-lime: "#c0d4a7"
-  tint-sky: "#9ab6c8"
-  tint-steel: "#a5b8c0"
-  tint-periwinkle: "#8c9ae0"
-  dark-canvas: "#1b1c19"
-  dark-surface: "#242520"
-  dark-surface-raised: "#2e2f2a"
-  dark-ink: "#dedbd2"
-  dark-frame-ink: "#9f9a90"
-  dark-muted: "#a6a196"
+  primary: "#ADEE68"
+  on-primary: "#154618"
+  primary-hover: "#CEF5A4"
+  forest: "#154618"
+  on-forest: "#FFFFFF"
+  green: "#36893B"
+  canvas: "#FDF8F2"
+  surface: "#FFFFFF"
+  ink: "#0C0B0A"
+  muted-ink: "#625C55"
+  border: "#EAE0D7"
+  input-border: "#857D73"
+  link: "#154618"
+  focus: "#154618"
+  tint-lime: "#CEF5A4"
+  tint-lime-soft: "#ECFFC7"
+  tint-lilac: "#F6EBFE"
+  tint-peach: "#FFEFD3"
+  tint-blue: "#E8F0FF"
+  tint-coral: "#FEEBE7"
+  accent-lilac: "#DBB9F3"
+  accent-peach: "#F8C677"
+  accent-blue: "#B6C5F3"
+  accent-coral: "#F5A894"
+  success: "#154618"
+  on-success: "#FFFFFF"
+  warning: "#704600"
+  error: "#B42318"
+  error-surface: "#FEEBE7"
 
 typography:
   display:
-    fontFamily: Arial Black, Arial, Helvetica, sans-serif
-    fontSize: 36px
-    fontWeight: 900
-    lineHeight: 1
-    letterSpacing: 0
-  heading-1:
-    fontFamily: Arial Black, Arial, Helvetica, sans-serif
-    fontSize: 24px
+    fontFamily: '"ABC Rom Condensed Heavy", "Arial Narrow", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 48px
     fontWeight: 900
     lineHeight: 1.05
-    letterSpacing: 0
+    letterSpacing: -0.02em
+  heading-1:
+    fontFamily: '"ABC Rom Condensed Heavy", "Arial Narrow", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 36px
+    fontWeight: 900
+    lineHeight: 1.1
+    letterSpacing: -0.02em
   heading-2:
-    fontFamily: Helvetica, Arial, sans-serif
-    fontSize: 16px
+    fontFamily: '"ABC Rom", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 28px
     fontWeight: 700
     lineHeight: 1.2
-    letterSpacing: 0
+    letterSpacing: -0.01em
   heading-3:
-    fontFamily: Helvetica, Arial, sans-serif
-    fontSize: 14px
+    fontFamily: '"ABC Rom", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 20px
     fontWeight: 700
-    lineHeight: 1.2
+    lineHeight: 1.3
     letterSpacing: 0
   body:
-    fontFamily: Times New Roman, Times, serif
-    fontSize: 14px
+    fontFamily: '"ABC Rom", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 16px
     fontWeight: 400
-    lineHeight: 1.4
+    lineHeight: 1.5
     letterSpacing: 0
   body-sm:
-    fontFamily: Times New Roman, Times, serif
-    fontSize: 12px
-    fontWeight: 400
-    lineHeight: 1.4
-    letterSpacing: 0
-  caption:
-    fontFamily: Times New Roman, Times, serif
-    fontSize: 11px
-    fontWeight: 400
-    lineHeight: 1.35
-    letterSpacing: 0
-  button:
-    fontFamily: Helvetica, Arial, sans-serif
-    fontSize: 12px
-    fontWeight: 700
-    lineHeight: 1
-    letterSpacing: 0
-  link:
-    fontFamily: Times New Roman, Times, serif
+    fontFamily: '"ABC Rom", "Helvetica Neue", Arial, sans-serif'
     fontSize: 14px
     fontWeight: 400
-    lineHeight: 1.4
+    lineHeight: 1.5
+    letterSpacing: 0
+  caption:
+    fontFamily: '"ABC Rom", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 12px
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: 0
+  button:
+    fontFamily: '"ABC Rom", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 16px
+    fontWeight: 700
+    lineHeight: 1.25
+    letterSpacing: 0
+  link:
+    fontFamily: '"ABC Rom", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.5
     letterSpacing: 0
   ui-label:
-    fontFamily: Helvetica, Arial, sans-serif
-    fontSize: 12px
+    fontFamily: '"ABC Rom", "Helvetica Neue", Arial, sans-serif'
+    fontSize: 14px
     fontWeight: 700
-    lineHeight: 1
+    lineHeight: 1.4
     letterSpacing: 0
 
 rounded:
   none: 0px
+  sm: 8px
+  md: 16px
+  lg: 24px
+  xl: 32px
   full: 9999px
 
 spacing:
-  xxs: 2px
   xs: 4px
-  s: 6px
   sm: 8px
-  m: 10px
   md: 12px
   lg: 16px
-  xl: 20px
-  xxl: 24px
-  section-sm: 32px
-  section: 40px
-  section-lg: 48px
-  touch: 44px
+  xl: 24px
+  xxl: 32px
+  section-sm: 48px
+  section: 64px
+  section-lg: 96px
+  touch: 48px
 
 components:
-  page-frame:
-    backgroundColor: "{colors.frame-ink}"
-    textColor: "{colors.canvas}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.sm}"
-  top-banner:
-    backgroundColor: "{colors.frame-ink}"
-    textColor: "{colors.canvas}"
-    typography: "{typography.heading-2}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
-  section-eyebrow:
-    backgroundColor: "{colors.tint-sage}"
+  page:
+    backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    typography: "{typography.display}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.xxl} {spacing.lg}"
-  section-eyebrow-olive:
-    backgroundColor: "{colors.tint-olive}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.xxl} {spacing.lg}"
-  ribbon-panel-title:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    typography: "{typography.heading-3}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.s} {spacing.md}"
-  ribbon-panel-body:
-    backgroundColor: "{colors.tint-sky}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
-  ribbon-panel-body-salmon:
-    backgroundColor: "{colors.tint-salmon}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
-  ribbon-panel-body-peach:
-    backgroundColor: "{colors.tint-peach}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
-  ribbon-panel-body-lime:
-    backgroundColor: "{colors.tint-lime}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
-  ribbon-panel-body-steel:
-    backgroundColor: "{colors.tint-steel}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
-  ribbon-panel-body-periwinkle:
-    backgroundColor: "{colors.tint-periwinkle}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
-  selected-marker:
-    backgroundColor: "{colors.stripe}"
-    rounded: "{rounded.none}"
-    width: "{spacing.xs}"
-  callout:
-    backgroundColor: "{colors.callout}"
-    textColor: "{colors.on-callout}"
-    typography: "{typography.body}"
     rounded: "{rounded.none}"
     padding: "{spacing.lg}"
-  sticker:
-    backgroundColor: "{colors.annotation}"
-    textColor: "{colors.on-annotation}"
-    typography: "{typography.button}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.xs} {spacing.sm}"
-  seal:
-    backgroundColor: "{colors.callout}"
-    textColor: "{colors.on-callout}"
+  header:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.ui-label}"
+    padding: "{spacing.lg} {spacing.xl}"
+  announcement:
+    backgroundColor: "{colors.tint-lime}"
+    textColor: "{colors.forest}"
+    typography: "{typography.body}"
+    padding: "{spacing.lg} {spacing.xl}"
+  card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body}"
+    rounded: "{rounded.lg}"
+    padding: "{spacing.xl}"
+  feature-panel:
+    backgroundColor: "{colors.tint-lime-soft}"
+    textColor: "{colors.forest}"
+    rounded: "{rounded.xl}"
+    padding: "{spacing.xxl}"
+  badge:
+    backgroundColor: "{colors.tint-lime}"
+    textColor: "{colors.forest}"
     typography: "{typography.ui-label}"
     rounded: "{rounded.full}"
-    padding: "{spacing.md}"
+    padding: "{spacing.sm} {spacing.md}"
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
     typography: "{typography.button}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
+    rounded: "{rounded.full}"
+    minHeight: "{spacing.touch}"
+    padding: "{spacing.md} {spacing.xl}"
   button-secondary:
     backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
+    textColor: "{colors.forest}"
+    borderColor: "{colors.forest}"
     typography: "{typography.button}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.md} {spacing.lg}"
+    rounded: "{rounded.full}"
+    minHeight: "{spacing.touch}"
+    padding: "{spacing.md} {spacing.xl}"
   text-input:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
+    borderColor: "{colors.input-border}"
     typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.sm} {spacing.md}"
+    rounded: "{rounded.sm}"
+    minHeight: "{spacing.touch}"
+    padding: "{spacing.md} {spacing.lg}"
+  choice-card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    borderColor: "{colors.input-border}"
+    typography: "{typography.body}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.lg}"
   link:
     textColor: "{colors.link}"
     typography: "{typography.link}"
-  icon-navigation:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    typography: "{typography.ui-label}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.sm}"
+  callout:
+    backgroundColor: "{colors.tint-lime-soft}"
+    textColor: "{colors.forest}"
+    typography: "{typography.body}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.lg}"
+  error-message:
+    backgroundColor: "{colors.error-surface}"
+    textColor: "{colors.error}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.sm}"
+    padding: "{spacing.md} {spacing.lg}"
   data-table-cell:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     typography: "{typography.body-sm}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.s} {spacing.sm}"
+    padding: "{spacing.lg}"
   dialog:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.xxl}"
-  page-frame-dark:
-    backgroundColor: "{colors.dark-canvas}"
-    textColor: "{colors.dark-ink}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.sm}"
-  panel-dark:
-    backgroundColor: "{colors.dark-surface}"
-    textColor: "{colors.dark-ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.lg}"
-  dialog-dark:
-    backgroundColor: "{colors.dark-surface-raised}"
-    textColor: "{colors.dark-ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.xxl}"
-  muted-copy-dark:
-    backgroundColor: "{colors.dark-canvas}"
-    textColor: "{colors.dark-muted}"
-    typography: "{typography.body-sm}"
-    rounded: "{rounded.none}"
+    rounded: "{rounded.lg}"
+    padding: "{spacing.xl}"
   empty-state:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     typography: "{typography.body}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.section}"
+    rounded: "{rounded.lg}"
+    padding: "{spacing.xxl}"
   footer:
-    backgroundColor: "{colors.frame-ink}"
-    textColor: "{colors.canvas}"
+    backgroundColor: "{colors.forest}"
+    textColor: "{colors.on-forest}"
     typography: "{typography.body-sm}"
-    rounded: "{rounded.none}"
-    padding: "{spacing.xxl} {spacing.lg}"
+    padding: "{spacing.section-sm} {spacing.xl}"
 ---
 
-# Hardframe Interface System
+# Taxfix-inspired Interface System
+
+## Reference and scope
+
+Use the current [Taxfix German website](https://taxfix.de/) as the visual reference,
+reviewed on 17 September 2026. Its public page styles provide the lime `#ADEE68`,
+forest `#154618`, cream `#FDF8F2`, neutral and pastel palette below, plus the ABC Rom
+and ABC Rom Condensed Heavy font families. The visible design combines expressive
+condensed headlines, pill actions, rounded content blocks, natural photography,
+and spacious light sections.
+
+This document adapts that direction for this application's mobile-first UI. It is
+not an official Taxfix brand manual. Type sizes, spacing, interaction states,
+muted text, input borders, warning, and error colors are project choices. The
+front matter defines the target tokens; it does not describe the current CSS.
+Implementing this direction in application code is a separate change.
 
 ## Design intent
 
-Build a crisp, compact interface that feels assembled from ink, paper, labels, and
-screen-native color. The page is a paper or deep-gray field held inside a literal
-frame. Information is divided by rules and flat color blocks, never by soft floating
-cards.
+Make complicated tasks feel approachable and manageable. Each screen should offer
+a clear heading, a short explanation, and an obvious next step. Balance confident
+headlines with calm reading text and generous space. Green provides recognition
+and emphasis; white and cream give content room to breathe.
 
-The system should feel direct:
-
-- Use paired paper and ink neutrals for structure.
-- Use color to label, group, warn, or annotate.
-- Use heavy sans-serif type for hierarchy and serif type for reading.
-- Keep controls square, bordered, and visibly interactive.
-- Prefer flat surfaces. Use one hard shadow only when overlap must be unmistakable.
-
-## Non-negotiable visual rules
-
-1. Every full-page composition has a visible frame.
-2. Borders and dividers are solid, straight, and one pixel unless a component recipe
-   explicitly calls for the page frame.
-3. Cards, fields, buttons, menus, tooltips, and dialogs use `0px` radius.
-4. Only seals and truly circular icon marks use `9999px`.
-5. Red is a scarce high-emphasis callout, limited to one dominant block per view.
-6. Yellow is an annotation color for short labels, counts, and markers.
-7. Blue is reserved for underlined inline links on light surfaces.
-8. Tints group sibling content; they do not encode success, warning, or error by
-   themselves.
-9. Gradients, blur, glass effects, and soft shadows are out of system.
-10. Interaction must not depend on hover.
+- Lead with the user's task or benefit in plain, friendly language.
+- Use one dominant action per task area and quieter secondary actions.
+- Group related content through space, light fills, and rounded panels.
+- Keep decoration subordinate to useful content and progress.
+- Preserve this application's identity and domain when borrowing the visual style.
 
 ## Color system
 
-### Structural colors
+| Role | Token | Use |
+| --- | --- | --- |
+| Primary | `{colors.primary}` | Main action, selected emphasis |
+| On primary | `{colors.on-primary}` | Text and icons on lime |
+| Forest | `{colors.forest}` | Brand detail, links, strong contrast sections |
+| On forest | `{colors.on-forest}` | Text on forest surfaces |
+| Canvas | `{colors.canvas}` | Warm page background |
+| Surface | `{colors.surface}` | Header, cards, inputs, dialogs |
+| Ink | `{colors.ink}` | Headings and reading text |
+| Muted ink | `{colors.muted-ink}` | Supporting text and metadata |
+| Border | `{colors.border}` | Quiet dividers and decorative card edges |
+| Input border | `{colors.input-border}` | Visible control boundaries |
+| Focus | `{colors.focus}` | Focus outline on light surfaces |
 
-| Role | Light | Dark | Use |
-|---|---:|---:|---|
-| Canvas | `{colors.canvas}` | `{colors.dark-canvas}` | Page background |
-| Surface | `{colors.surface}` | `{colors.dark-surface}` | Panels and controls |
-| Raised surface | `{colors.surface}` | `{colors.dark-surface-raised}` | Menus and dialogs |
-| Ink | `{colors.ink}` | `{colors.dark-ink}` | Primary text |
-| Frame ink | `{colors.frame-ink}` | `{colors.dark-frame-ink}` | Rules and frames |
-| Muted text | `{colors.muted-ink}` | `{colors.dark-muted}` | Supporting copy |
-| Primary action | `{colors.primary}` | `{colors.primary}` | Filled action |
-| Inline link | `{colors.link}` | `{colors.dark-ink}` | Always underlined |
+Use lime with forest or near-black text, never white labels. Use white text on
+forest sections and lime for their primary actions. The lighter border token is
+for separation; controls requiring a visible boundary use `input-border`.
 
-Treat the modes as paired roles, not literal inversions: paper and ink in light mode
-map to deep gray and soft ink in dark mode while accent identity stays fixed. Use
-`--frame-ink` for structural rules; `--border` is only a quiet separator. Keep link
-underlines visible when blue is replaced by soft ink.
+The lilac, peach, blue, and coral tints support occasional feature groups or
+illustrations. Pair them with ink, keep sibling treatments consistent, and avoid
+turning every section into a different color. Their stronger accent partners are
+for small visual details, not paragraph text.
 
-### Accent colors
+Success uses forest with an explicit check and message. Warnings use warning text
+on the peach tint; errors use error text on the error surface. Brand green alone
+does not mean success. Always pair status color with a label or symbol.
 
-- `{colors.callout}`: one urgent or high-emphasis block.
-- `{colors.annotation}`: short sticker labels and counters.
-- `{colors.stripe}`: narrow stripes, selected markers, or chart accents.
-- `{colors.tint-olive}`, `{colors.tint-sage}`, `{colors.tint-salmon}`,
-  `{colors.tint-peach}`, `{colors.tint-lime}`, `{colors.tint-sky}`,
-  `{colors.tint-steel}`, and `{colors.tint-periwinkle}`: finite section and series
-  colors.
+### Theme scope
 
-Use deep ink text on every tint and on yellow. Never place paragraph text over a
-multicolor treatment.
+Light mode is the reference direction. Forest feature sections and footers are
+intentional contrast areas within a light page, not a complete dark theme. If a
+dark theme is implemented, define and contrast-check its semantic roles separately;
+do not automatically invert the palette or retain the previous charcoal system.
 
 ## Typography
 
-Use three explicit roles:
+Use sans-serif throughout:
 
-- `font-display`: `Arial Black`, then Arial/Helvetica/sans-serif. Use for page titles,
-  section labels, and large numeric emphasis.
-- `font-ui`: Helvetica, then Arial/sans-serif. Use for buttons, navigation, tabs,
-  field labels, table headings, and compact headings.
-- `font-body`: `Times New Roman`, then Times/serif. Use for paragraphs, descriptions,
-  metadata, links, and help text.
+- `font-display`: ABC Rom Condensed Heavy for hero titles and major numeric emphasis.
+- `font-ui`: ABC Rom with a bold face for navigation, actions, labels, and headings.
+- `font-body`: ABC Rom regular for reading text, descriptions, metadata, and help.
 
-Do not use `font-sans` as an accidental catch-all. Apply the role at the component
-boundary so typography stays deterministic across browsers.
+Load ABC Rom only when licensed font assets are available to the project. Otherwise
+use the fallback stacks in the tokens. Fallbacks approximate the direction; they
+are not an exact match. Never stretch text with CSS transforms to imitate a
+condensed face. Keep the role utilities even when UI and body share a family.
 
-### Type scale
+| Role | Mobile size / line height | Wider layouts | Weight |
+| --- | --- | --- | --- |
+| Display | `48px / 1.05` | Up to `72px` | 900 |
+| Heading 1 | `36px / 1.1` | Up to `48px` | 900 |
+| Heading 2 | `28px / 1.2` | Up to `36px` | 700 |
+| Heading 3 | `20px / 1.3` | `24px` where useful | 700 |
+| Body | `16px / 1.5` | `18px` for introductory copy | 400 |
+| Small body | `14px / 1.5` | Unchanged | 400 |
+| Caption | `12px / 1.5` | Unchanged | 400 |
+| Button | `16px / 1.25` | Unchanged | 700 |
+| UI label | `14px / 1.4` | Unchanged | 700 |
 
-| Role | Size / line height | Weight | Case |
-|---|---|---:|---|
-| Display | `36px / 1` | 900 | Uppercase for short headings |
-| Heading 1 | `24px / 1.05` | 900 | Uppercase or sentence case |
-| Heading 2 | `16px / 1.2` | 700 | Sentence case |
-| Heading 3 | `14px / 1.2` | 700 | Sentence case |
-| Body | `14px / 1.4` | 400 | Sentence case |
-| Small body | `12px / 1.4` | 400 | Sentence case |
-| Caption | `11px / 1.35` | 400 | Sentence case |
-| Button / UI label | `12px / 1` | 700 | Short labels |
-
-Keep body copy in readable measures. Long text should not span the full framed
-canvas.
+Use sentence case and short, natural headings. Reserve condensed type for large
+emphasis, never form labels or long paragraphs. Keep reading text around `60ch`
+and avoid forced line breaks that fail on mobile. Use tabular numerals for values
+that update or need comparison. Essential instructions must remain body-sized.
 
 ## Spacing and layout
 
-Use the supplied spacing scale exactly:
+Use the spacing scale `4, 8, 12, 16, 24, 32, 48, 64, 96px`.
 
-`2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48px`
+- Start with one column and `16px` horizontal gutters.
+- At `768px`, allow `24–32px` gutters and two columns when content benefits.
+- At `1024px`, allow wider split layouts or three comparable cards.
+- Center general page content within `1200px`; keep focused form flows near `640px`.
+- Use `48px` between major mobile sections and `64–96px` on larger screens.
+- Use `16–24px` inside mobile cards and `24–32px` on larger panels.
+- Keep DOM order aligned with mobile reading and keyboard order.
 
-Prefer 4px-aligned values. The 6px and 10px steps exist for dense table cells,
-compact title bars, and control interiors.
+The page has an open edge with no enclosing dark frame. Full-width background
+bands may alternate white, cream, and restrained green tints. Use a clear header,
+a spacious main region, and a forest footer when a footer is useful. Product
+screens should prioritize the current task over marketing-sized hero sections.
 
-### Page frame
+Stack split compositions on narrow screens with explanatory text before supporting
+imagery. Let headings wrap, avoid fixed card heights, and keep primary actions easy
+to reach. Only tables or similar dense regions may scroll horizontally inside
+their own labeled container.
 
-- Center the application canvas and let it use the available width.
-- Use an `8px` frame on desktop, `4px` at widths below `768px`, and `2px` below
-  `480px`.
-- Use `16–24px` inner gutters on larger screens and `12px` on compact screens.
-- Separate major sections with a one-pixel rule and `32–48px` vertical spacing.
-- Keep the header and footer visually attached to the frame.
+## Shape and depth
 
-### Grids
+| Element | Radius | Treatment |
+| --- | --- | --- |
+| Buttons and compact badges | `9999px` | Pill silhouette |
+| Inputs, selects, menus | `8px` | Clear, restrained boundary |
+| Choice cards and callouts | `16px` | Light fill or subtle border |
+| Cards and dialogs | `24px` | White or tinted surface |
+| Large feature panels and image crops | `32px` | Generous internal space |
+| Full-width page sections | `0px` | Open background band |
 
-- Use four columns only for short, parallel items.
-- Reduce four columns to two below `768px`.
-- Reduce every multi-column region to one column below `480px`.
-- Content order in the DOM must already match the intended mobile reading order.
-- Do not force equal heights when content lengths differ substantially.
-
-## Depth and shape
-
-| Level | Treatment | Use |
-|---|---|---|
-| Flat | Surface color only | Default sections and controls |
-| Ruled | `1px solid var(--frame-ink)` | Panels, fields, tables, menus |
-| Hard | `2px 2px 0 var(--frame-ink)` | Dialogs or one overlapping object |
-| Frame | Solid `8px`, `4px`, or `2px` field | Application boundary |
-
-Use `shadow-hard` at most once in a local stack. Never combine it with blur,
-transparency, or rounded corners.
+Keep normal content flat. A soft shadow such as `0 8px 24px rgb(21 70 24 / 0.10)`
+may separate a menu or dialog from the page. Avoid hard offset shadows, heavy
+outlines, and ornamental frames. Use solid fills for core UI; translucent or
+photographic treatments must not compromise the readability of controls or copy.
 
 ## Component recipes
 
-### Section eyebrow
+### Header and navigation
 
-A section eyebrow is a solid tint block with a short heavy heading. Use `24px 16px`
-padding at full width. When several eyebrows form a grid, assign distinct tints from
-the finite palette and keep all labels in deep ink.
+Use a white header with a compact identity mark, readable navigation, and one lime
+primary action where appropriate. On mobile, show the essential action and an
+accessible menu trigger. Mark the current destination with weight plus an underline
+or filled treatment and `aria-current`, not color alone.
 
-### Ribbon panel
+### Hero and feature panels
 
-Build this as two adjacent parts:
+Pair a short condensed headline with normal-width supporting copy and one clear
+CTA. A desktop hero can place people or product imagery alongside the text; a
+mobile version stacks them. Use light green or cream panels with generous curves
+for benefits or progress summaries. Keep text on a predictable, high-contrast
+surface even when imagery fills the surrounding section.
 
-1. A paper-surface title row with `6px 12px` padding, `font-ui`, and a one-pixel border.
-2. A tinted or paper-surface body with `12px 16px` padding and `font-body`.
+### Cards and choice cards
 
-Do not wrap the pair in another card. Shared borders create the grouping.
+Cards use white or one pastel fill, `24px` corners, and comfortable padding. Titles
+and content belong to one continuous surface rather than separate ribbon bars.
+Avoid nested cards when spacing or a divider can express the relationship.
 
-### Callout, sticker, and seal
-
-- Callout: red fill, deep ink text, frame-ink border, `16px` padding. One dominant callout
-  per view.
-- Sticker: yellow fill, deep ink text, frame-ink border, `4px 8px` padding. Keep the label
-  brief.
-- Seal: circular only when the content has a true badge-like meaning. Do not use the
-  circle as a generic card shape.
+Choice cards use `16px` corners, a visible border, and a native radio or checkbox
+when they represent selection. Selected state adds a forest border, pale lime fill,
+and a checked control. Make the entire label clickable without nesting interactive
+controls. Preserve distinct hover, focus, selected, and disabled states.
 
 ### Buttons
 
-Primary buttons are ink-filled with paper text. Secondary buttons use a paper surface
-with ink text and a frame-ink border. Both are square, use `font-ui`, and use `12px 16px`
-padding.
+Primary actions use lime fill and forest text; secondary actions use white with a
+forest border and label. On a lime panel, use a forest-filled action with white
+text to preserve distinction. Tertiary actions use an underlined text treatment.
 
-Required states:
+- Keep controls at least `48px` high, with `12px 24px` padding and pill corners.
+- Use the lighter `primary-hover` fill on hover and a forest inset outline on press.
+- Show a `2px` focus outline with a `3px` offset. Use lime on forest backgrounds.
+- Disabled actions keep readable labels and expose their disabled semantics.
+- Loading actions retain their width, show progress, and expose a busy state.
+- An optional trailing arrow sits in a circular forest area with a lime icon; use
+  this sparingly for prominent CTAs, not every button.
 
-- Default: full one-pixel border.
-- Focus visible: add a two-pixel high-contrast outline outside the border.
-- Active or pressed: remove the hard shadow or invert the ink/paper surface.
-- Disabled: preserve the label, reduce emphasis, and block pointer and keyboard
-  activation.
-- Loading: keep the button width stable and expose an accessible busy state.
-
-Use a minimum `44px × 44px` interactive area on touch layouts. The visible control
-may stay compact when its hit area is enlarged without overlap.
+Full-width primary actions work well in narrow form flows. Never rely on hover to
+reveal their purpose or make essential actions available.
 
 ### Links
 
-Inline links are blue and underlined on light surfaces. In dark mode they use soft
-ink and remain underlined. Never remove the underline as the only non-color cue.
-Navigation items may use ink/paper text, but active state requires a rule, inverse
-fill, or stripe.
+Use forest, underlined links within reading text. On forest backgrounds use white
+or lime and retain the underline. Provide descriptive labels and a visible focus
+state. Navigation may omit underlines until active, but must still expose its state.
 
-### Form controls
+### Forms and guided flows
 
-Inputs, text areas, selects, combobox triggers, checkboxes, and menus are square and
-use a one-pixel rule.
+Use visible labels above fields, `16px` input text, white fills, `8px` corners,
+and a one-pixel input border. Keep help near the relevant control. Use simple
+questions, a clear next action, and honest progress labels for multi-step flows.
 
-- Labels appear above fields in `font-ui`.
-- Help and error text occupy a stable row below the field.
-- Focus visible uses a two-pixel high-contrast outline.
-- Invalid state uses text plus an icon or message; color alone is insufficient.
-- Disabled and read-only states must remain distinguishable.
-- Native autofill must not make text unreadable.
+- Group fields by task; disclose advanced options only when relevant.
+- Preserve entered values when navigating back or recovering from errors.
+- Connect help and errors through `aria-describedby` and expose invalid state.
+- Explain how to fix an error in plain language beside the affected field.
+- Distinguish disabled and read-only fields; preserve readable autofill styles.
+- Radios remain circular; checkboxes have gently rounded corners.
 
-### Data tables
+### Callouts and badges
 
-Use semantic table elements. Header cells use `font-ui`; body cells use
-`font-body`. Separate rows and columns with one-pixel rules. On narrow screens,
-allow horizontal scrolling or convert each row to a labeled record without changing
-the DOM order.
+Use a pale lime callout with forest text and a relevant icon for reassurance or
+help. Use peach for a warning and the error recipe for validation problems. Badges
+are short pill labels. Avoid red promotional blocks, yellow sticker treatments,
+and decorative seals competing with the main action.
+
+### Tables and summaries
+
+Use semantic tables, bold sans-serif headers, normal reading text, and light row
+dividers. Prefer alignment and whitespace over a full grid of borders. Right-align
+comparable numbers and include units. On narrow screens, keep a labeled scroll
+region or present records with explicit field labels without changing reading order.
 
 ### Dialogs and popovers
 
-Use a paper or raised dark surface, one-pixel rule, square corners, and optional hard
-shadow. Preserve focus trapping, return focus to the trigger, support Escape, and
-label the surface through its title. The backdrop may darken the page, but must not
-blur it.
+Use white surfaces, rounded corners, and soft elevation only as needed. Dialogs
+use `24px` corners; menus use `8px`. Keep titles, explanations, and actions aligned.
+Modal dialogs trap focus, return it to the trigger, support Escape, and use an
+accessible title. Popovers retain the focus behavior appropriate to their purpose.
+A dim backdrop is sufficient; avoid blur that obscures context.
 
-### Empty and loading states
+### Empty, loading, and completion states
 
-Keep the same border and spacing as the content they replace. State the condition in
-a compact heading, provide one next action when useful, and do not invent a
-decorative card style for an empty region.
+Keep the space and shape of the content being replaced. Explain an empty state in
+one short heading and offer a useful next step. Use restrained skeletons or a
+spinner for loading, respect reduced motion, and announce status changes without
+stealing focus. Completion states use a check, a clear result, and the next action.
+
+## Imagery, icons, and voice
+
+Use natural, approachable photography and clear product screenshots when they help
+explain a task. Crop images in generous rounded rectangles and preserve useful
+context on small screens. Use simple consistent icons, generally `20–24px`, with
+forest or ink strokes. Decorative images have empty alt text; meaningful images
+have descriptions that explain their purpose.
+
+Write with warmth and clarity. Address the user directly, explain one idea at a
+time, and name actions by outcome. Avoid jargon, pressure, and unsupported claims.
+Borrow the visual grammar while using this product's own content, identity, and
+assets; Taxfix logos, testimonials, and refund figures are not application content.
 
 ## React, Tailwind, shadcn, and Base UI contract
 
-### React
+These are implementation targets for a future UI change, not utilities guaranteed
+to exist in the current application.
 
-- Components own semantics and composition; tokens own appearance.
-- Keep variants finite: `tone`, `state`, `density`, and `inverted`.
-- Render native elements whenever they provide the required behavior.
-- Do not branch the DOM for visual breakpoints.
+- Keep semantics and behavior in React components and appearance in shared tokens.
+- Map `primary` / `primary-foreground` to lime / forest, `background` to cream,
+  `card` and `popover` to white, `foreground` to ink, and `ring` to forest.
+- Define separate semantic tokens for subtle dividers and visible input borders.
+- Keep `font-display`, `font-ui`, and `font-body` explicit at component boundaries.
+- Use named type utilities and the spacing scale; avoid scattered arbitrary values.
+- Give buttons pill radii, fields small radii, and cards large radii through shared
+  variants. Replace the existing blanket `rounded-none` and hard-shadow treatments
+  when implementing this design.
+- Retain shadcn and Base UI state attributes, keyboard navigation, collision
+  handling, dismissal, focus management, and accessible labeling.
+- Ensure portal content inherits the same tokens and fonts as the application.
+- Keep variants tied to real component needs; do not add flags for hypothetical use.
 
-### Tailwind
+## Accessibility and completion checklist
 
-- Consume semantic variables such as `bg-primary`, `text-primary-foreground`,
-  `border-frame-ink`, `bg-callout`, `bg-annotation`, and `text-link`.
-- Use the named type utilities: `text-display`, `text-heading-1`,
-  `text-heading-2`, `text-heading-3`, `text-body`, `text-body-sm`,
-  `text-caption`, and `text-ui`.
-- Use Tailwind's numeric utilities for the core spacing scale. Reserve named
-  spacing for semantic roles, for example `py-section`, `gap-section-sm`,
-  `py-section-lg`, and `min-h-touch`. Use `compact:` from `480px` and `md:` from
-  `768px`.
-- Add `rounded-none` explicitly to every shadcn or headless surface.
-- Apply `font-display`, `font-ui`, or `font-body` explicitly.
-- Use `shadow-hard` only for the hard depth level.
-- Keep arbitrary values out of component files when a token exists.
+Before shipping an implementation, verify:
 
-### shadcn
-
-- Treat generated components as behavioral starting points.
-- Replace default radii with `rounded-none` at the component variant layer.
-- Replace soft shadows with `shadow-none` or `shadow-hard`.
-- Keep data attributes and accessibility wiring intact.
-- Map destructive semantics independently; the red callout token is visual
-  emphasis, not a universal error token.
-
-### Base UI
-
-- Style triggers, positions, backdrops, and popups separately.
-- Use exposed state attributes for focus, pressed, selected, open, and disabled
-  variants.
-- Keep collision handling, keyboard navigation, focus management, and dismissal
-  behavior provided by the primitive.
-- Portals must inherit the same color and type tokens as the framed application.
-
-## Responsive and input behavior
-
-- Desktop: full frame, complete navigation, parallel grids where content supports
-  comparison.
-- Below `768px`: reduce the frame, collapse four columns to two, and stack split
-  compositions.
-- Below `480px`: use a two-pixel frame, one-column content, `12px` gutters, and
-  `44px` minimum targets.
-- Never hide essential actions behind hover.
-- Do not use horizontal page scrolling. Tables and code regions may scroll inside
-  their own bordered container.
-- Images use explicit width and height, stay inside their panel, and preserve aspect
-  ratio with `object-fit`.
-
-## Accessibility and browser behavior
-
-- Use semantic HTML before adding ARIA.
-- Maintain a visible `:focus-visible` treatment for every interactive element.
-- Pair color with text, shape, underline, or iconography.
-- Respect `prefers-reduced-motion`; no information may depend on animation.
-- Keep DOM order, visual order, focus order, and reading order aligned.
-- Test keyboard operation and zoom before treating a component as complete.
-- Use standard CSS borders, grid, flexbox, and custom properties. Do not rely on
-  engine-specific styling for essential structure.
-- Check Chrome, Safari, and Firefox at desktop and narrow widths.
-
-## Composition checklist
-
-Before shipping a view, verify:
-
-- A visible frame contains the composition.
-- The page has one dominant title and no more than one red callout.
-- Color blocks carry labels or grouping, not decoration alone.
-- Panels are flat, square, and rule-separated.
-- Primary and secondary actions use ink/paper polarity.
-- Inline links remain underlined.
-- Every state is visible with keyboard input.
-- Touch targets reach `44px × 44px` on compact layouts.
-- Layouts reduce to one readable column without reordered content.
-- No gradient, blur, glass effect, soft shadow, or accidental radius remains.
+- One clear title and primary action establish the task hierarchy.
+- Lime, forest, warm neutrals, and restrained pastels provide a coherent palette.
+- Headlines are bold and condensed; body copy and controls use readable sans-serif.
+- Buttons are pill-shaped, content panels rounded, and page edges open.
+- Normal text meets `4.5:1` contrast; large text and essential non-text UI meet `3:1`.
+- Focus is visible on both light and forest surfaces and is not clipped or obscured.
+- Controls have accessible names, status is not color-only, and touch targets reach
+  the project default of `48px × 48px`.
+- Keyboard, screen-reader order, error recovery, and dialog behavior remain intact.
+- Layouts work at `320px` width, with enlarged text and at `200%` zoom.
+- Motion respects `prefers-reduced-motion`; no result depends on animation.
+- Images preserve aspect ratio and dimensions are declared to prevent layout shifts.
+- Chrome, Safari, and Firefox retain readable typography and usable controls.
