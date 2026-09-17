@@ -31,7 +31,12 @@ describe("taxfix pitch timeline", () => {
 			"year",
 			"end",
 		]);
-		expect(BEATS[0].headline).toBe("Once a year is not a product.");
+		expect(BEATS[0].headline).toBe("You spend all year. Why file once?");
+		expect(BEATS[0].body).toBe(
+			"Maya opens Taxfix in April — then silence until the next deadline.",
+		);
+		expect(BEATS[6].headline).toBe("A year of keeps. One return.");
+		expect(BEATS[6].body).toBe("Year-round use is the filing.");
 		expect(BEATS.at(-1)?.body).toBe(PUNCHLINE);
 	});
 
