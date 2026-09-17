@@ -48,8 +48,8 @@ export const BEATS: readonly Beat[] = [
 	{
 		id: "problem",
 		durationMs: 15_000,
-		headline: "Once a year is not a product.",
-		body: "Maya opens Taxfix in April. Then silence until the next deadline.",
+		headline: "You spend all year. Why file once?",
+		body: "Maya opens Taxfix in April — then silence until the next deadline.",
 	},
 	{
 		id: "card",
@@ -84,7 +84,7 @@ export const BEATS: readonly Beat[] = [
 	{
 		id: "year",
 		durationMs: 16_000,
-		headline: "11 taps. One return.",
+		headline: "A year of keeps. One return.",
 		body: "Year-round use is the filing.",
 	},
 	{
