@@ -50,13 +50,13 @@ const CONTEXT_CHIPS = [
 	{ label: "Mixed", hint: "mixed" as const },
 	{ label: "Private", hint: "private" as const },
 ];
-const MOCK_VOICE_TEXT = DEMO_SCRIPT[0]?.text ?? "coworking day pass 45";
+const MOCK_VOICE_TEXT = "Bahn to client meeting 28.50";
 
 const ORCH_SEATS = [
-	{ name: "Hackermans", detail: "scope · clock" },
-	{ name: "Cursor Agent", detail: "Sapne · $50 · 002e4e0→76a4054" },
+	{ name: "Cursor Agent", detail: "Sapne · $50 · 6c7ecd5→bdb349e" },
 	{ name: "Titans", detail: "plan · docs" },
-	{ name: "coder", detail: "PE · Akte" },
+	{ name: "coder", detail: "PE · Akte · bdb349e" },
+	{ name: "Hackermans", detail: "scope · clock" },
 ] as const;
 
 const WELCOME: SalBotMessage = {
@@ -177,6 +177,7 @@ export default function SalBotRoute() {
 	const [voiceHint, setVoiceHint] = useState<string | null>(null);
 	const [typing, setTyping] = useState(false);
 	const [demoRunning, setDemoRunning] = useState(false);
+	const [speechAvailable, setSpeechAvailable] = useState(true);
 	const [contextHint, setContextHint] = useState<
 		"work" | "mixed" | "private" | null
 	>(null);
@@ -185,6 +186,24 @@ export default function SalBotRoute() {
 	const savingRef = useRef(false);
 	const akteRef = useRef<YearFileState>(emptyYearFile());
 	const demoCancelRef = useRef(false);
+
+	useEffect(() => {
+		const SpeechRecognitionCtor =
+			typeof window !== "undefined"
+				? (
+						window as unknown as {
+							SpeechRecognition?: unknown;
+							webkitSpeechRecognition?: unknown;
+						}
+					).SpeechRecognition ||
+					(
+						window as unknown as {
+							webkitSpeechRecognition?: unknown;
+						}
+					).webkitSpeechRecognition
+				: undefined;
+		setSpeechAvailable(Boolean(SpeechRecognitionCtor));
+	}, []);
 
 	useEffect(() => {
 		const stored = loadChat();
@@ -265,17 +284,17 @@ export default function SalBotRoute() {
 			akteRef.current = result.state;
 			setYearFile(result.state);
 			setMessages((prev) =>
-			prev.map((message) =>
-				message.id === botMsg.id
-					? {
-							...message,
-							savedToFile: true,
-							text:
-								message.text +
-								` In your Akte. Weekly ${formatEuro(weeklySaveEuro(result.state.expenses))} / YTD ${formatEuro(ytdImpactEuro(result.state.expenses))}.`,
-						}
-					: message,
-			),
+				prev.map((message) =>
+					message.id === botMsg.id
+						? {
+								...message,
+								savedToFile: true,
+								text:
+									message.text +
+									` In your Akte. Weekly ${formatEuro(weeklySaveEuro(result.state.expenses))} / YTD ${formatEuro(ytdImpactEuro(result.state.expenses))}.`,
+							}
+						: message,
+				),
 			);
 		} finally {
 			savingRef.current = false;
@@ -297,7 +316,6 @@ export default function SalBotRoute() {
 		}
 		saveBotMessage(target);
 	}
-
 
 	function stopMic() {
 		if (recognitionRef.current) {
@@ -334,7 +352,9 @@ export default function SalBotRoute() {
 				: undefined;
 
 		if (!SpeechRecognition) {
-			applyVoiceFallback("Mic API unavailable — mock transcript ready. Tap Send.");
+			applyVoiceFallback(
+				"Mic API unavailable — mock transcript ready. Tap Send.",
+			);
 			return;
 		}
 
@@ -359,7 +379,9 @@ export default function SalBotRoute() {
 				setVoiceHint("Voice captured — tap Send.");
 			};
 			recognition.onerror = () => {
-				applyVoiceFallback("Voice failed — mock loaded instead. Edit or tap Send.");
+				applyVoiceFallback(
+					"Voice failed — mock loaded instead. Edit or tap Send.",
+				);
 			};
 			recognition.onend = () => {
 				setListening(false);
@@ -635,6 +657,20 @@ export default function SalBotRoute() {
 						>
 							{listening ? "Stop" : "Voice"}
 						</Button>
+						{!speechAvailable ? (
+							<Button
+								type="button"
+								variant="outline"
+								size="lg"
+								disabled={demoRunning}
+								onClick={() => {
+									setInput(MOCK_VOICE_TEXT);
+									setVoiceHint("Mock transcript ready — tap Send.");
+								}}
+							>
+								Use mock: Bahn 28.50
+							</Button>
+						) : null}
 						<textarea
 							className="min-h-12 flex-1 border border-frame-ink bg-background px-3 py-2 font-body text-body outline-none focus-visible:border-ring"
 							value={input}

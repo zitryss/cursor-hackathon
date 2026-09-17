@@ -68,7 +68,9 @@ export default function HowWeBuiltRoute() {
 					<li>
 						Tax Pulse <code>/</code> film path untouched
 					</li>
-					<li>SHAs: 002e4e0 · aae4a07 · 76a4054 · 423f7f6 (PE) · trail docs</li>
+					<li>
+						SHAs: 002e4e0 · aae4a07 · 76a4054 · 6c7ecd5 (world) · bdb349e (PE)
+					</li>
 				</ul>
 			</section>
 
