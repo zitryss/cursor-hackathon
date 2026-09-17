@@ -12,8 +12,6 @@
 * [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss.com/blob/md-endpoints/llms.txt)
 * [shadcn/ui](https://ui.shadcn.com/llms.txt)
 * [Base UI](https://base-ui.com/llms.txt)
-* [Drizzle ORM](https://orm.drizzle.team/llms.txt)
-* [SQLite](https://www.sqlite.org/docs.html)
 * [Biome](https://biomejs.dev/)
 * [Vitest](https://vitest.dev/llms.txt)
 * [Playwright](https://playwright.dev/)
@@ -25,7 +23,7 @@
 * Use `pnpm run <script>` for project workflows. Use `pnpm exec <binary>` only when no project script covers the required tool operation.
 * Pass arguments directly after a `pnpm run` script name: `pnpm run <script> <args...>`; do not insert an npm-style `--`. pnpm forwards `--` to the target CLI, so use it only when that CLI explicitly requires an end-of-options marker; this project rule overrides generic examples.
 * Run package-provided CLIs from the local dependency graph. Never use global executables, `npx`, or `pnpm dlx`.
-* Do not run long-lived processes such as `pnpm run dev`, `pnpm run start`, `pnpm run db:studio`, or any watch mode. Assume the development server is already running.
+* Do not run long-lived processes such as `pnpm run dev`, `pnpm run start`, or any watch mode. Assume the development server is already running.
 * Never run Playwright unless explicitly requested or authorized by the user. This includes end-to-end tests, test discovery, browser diagnosis, browser installation, and scripts such as `verify:full` that invoke Playwright.
 
 ## Project Scripts
@@ -42,14 +40,9 @@
 | `deps:check` | Report dependency updates as JSON without changing files; exit code 1 means updates are available. |
 | `deps:update:runtime` | Update production dependencies and their version-coupled development packages. |
 | `deps:update:tooling` | Update development tools and their version-coupled runtime packages. |
-| `db:generate` | Generate migration SQL and snapshots from schema changes. |
-| `db:check` | Validate the Drizzle migration history and print structured output. |
-| `db:migrate` | Apply pending migrations to the configured database. |
-| `db:push` | Synchronize schema directly to a disposable local database without migration files. |
-| `db:studio` | Start Drizzle's interactive database browser; agents must not start it. |
 | `test` | Run the unit test suite once with concise agent output. |
 | `test:e2e` | Run the Playwright end-to-end suite once with line output; requires explicit user request or authorization. |
-| `verify` | Run Biome, type checking, migration validation, unit tests, and the production build. |
+| `verify` | Run Biome, type checking, unit tests, and the production build. |
 | `verify:full` | Run `verify`, then the complete end-to-end suite; requires explicit user request or authorization. |
 
 ## Workflows
@@ -109,25 +102,12 @@ pnpm exec shadcn add <component>
 
 Read the URLs returned by `docs` before implementation and review every generated file. Never use the deprecated `shadcn diff`, fetch registry files manually, or pass `--overwrite` without explicit user approval.
 
-### Database Workflow
-
-Use migrations by default:
-
-```bash
-pnpm exec drizzle-kit generate --explain --output=json
-pnpm run db:generate
-pnpm run db:check
-pnpm run db:migrate
-```
-
-Inspect generated SQL and snapshots before migration. Run `db:migrate` only when the task authorizes changing the configured database. Use `db:push` only for a local disposable database, preview it with `pnpm exec drizzle-kit push --explain --output=json`, and never pass `--force`.
-
 ### Runtime Dependency Updates
 
 Start with `pnpm run deps:check` and review release notes for the proposed versions.
 
 1. Run `pnpm run deps:update:runtime`.
-2. Keep `react` with `react-dom`, all four React Router packages, and `drizzle-orm` with `drizzle-kit` on matching versions.
+2. Keep `react` with `react-dom` and all four React Router packages on matching versions.
 3. Review `package.json` and `pnpm-lock.yaml`, apply required migrations, then run `pnpm run verify`.
 
 ### Tooling and Exact-Pinned CLI Updates
@@ -137,11 +117,11 @@ Start with `pnpm run deps:check` and review release notes for the proposed versi
 1. Run `pnpm run deps:update:tooling`.
 2. Run `corepack use pnpm@latest`, then `pnpm install` to validate the lockfile with the new pinned pnpm version.
 3. If Playwright changed, run `pnpm exec playwright install chromium firefox webkit` only when explicitly requested or authorized.
-4. Confirm the React Router, Drizzle, and Tailwind package families remain synchronized; review the manifest and lockfile, then run `pnpm run verify`.
+4. Confirm the React Router and Tailwind package families remain synchronized; review the manifest and lockfile, then run `pnpm run verify`.
 
 ## Project Guidelines
 
-* This is a mobile-first web application (see the [responsive design skill](.agents/skills/responsive-design/SKILL.md)).
+* The pitch deck is 16:9 primary; the phone is a mock inside the slide.
 * Use vertical slice architecture: organize code by feature or use case, keeping its UI, business logic, and data access together. Minimize coupling between slices.
 
 ## Git Guidelines

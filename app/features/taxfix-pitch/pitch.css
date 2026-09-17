@@ -1,0 +1,474 @@
+@import "@fontsource-variable/plus-jakarta-sans";
+
+.pitch-shell {
+	--pitch-lime: #adee68;
+	--pitch-forest: #154618;
+	--pitch-green: #36893b;
+	--pitch-canvas: #fdf8f2;
+	--pitch-surface: #ffffff;
+	--pitch-ink: #0c0b0a;
+	--pitch-muted: #625c55;
+	--pitch-lilac: #f6ebfe;
+	--pitch-blue: #e8f0ff;
+	--pitch-font:
+		"Plus Jakarta Sans Variable", "Plus Jakarta Sans", "Helvetica Neue",
+		sans-serif;
+	height: 100dvh;
+	overflow: hidden;
+	background: #0c1a0e;
+	color: var(--pitch-canvas);
+	font-family: var(--pitch-font);
+}
+
+.pitch-stage {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.85fr);
+	align-items: center;
+	gap: 3rem;
+	width: min(100vw, calc(100dvh * 16 / 9));
+	height: min(100dvh, calc(100vw * 9 / 16));
+	margin: 0 auto;
+	padding: 3.5rem 4rem;
+	background:
+		radial-gradient(80% 70% at 80% 40%, #1d5a24 0%, transparent 55%),
+		linear-gradient(160deg, #123516 0%, #0c1a0e 55%, #152016 100%);
+}
+
+.pitch-hitbox {
+	position: absolute;
+	inset: 0;
+	z-index: 4;
+	margin: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+.pitch-copy {
+	position: relative;
+	z-index: 1;
+	max-width: 36rem;
+	pointer-events: none;
+}
+
+.pitch-kicker {
+	margin: 0 0 1rem;
+	color: var(--pitch-lime);
+	font-size: 0.85rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+}
+
+.pitch-copy h1 {
+	margin: 0;
+	color: #fff;
+	font-size: clamp(2.4rem, 4.4vw, 4.4rem);
+	font-weight: 800;
+	line-height: 0.95;
+	letter-spacing: -0.04em;
+}
+
+.pitch-body {
+	margin: 1.25rem 0 0;
+	max-width: 28rem;
+	color: #d7ead0;
+	font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+	line-height: 1.35;
+}
+
+.pitch-device {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.pitch-start-hint {
+	position: absolute;
+	right: 4rem;
+	bottom: 1.5rem;
+	z-index: 5;
+	margin: 0;
+	color: var(--pitch-lime);
+	font-size: 0.85rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	pointer-events: none;
+}
+
+.pitch-phone {
+	width: min(22rem, 34vh);
+}
+
+.pitch-phone-bezel {
+	position: relative;
+	overflow: hidden;
+	border: 3px solid #1a1a1a;
+	border-radius: 2.4rem;
+	background: #111;
+	box-shadow:
+		0 24px 60px rgb(0 0 0 / 45%),
+		inset 0 0 0 2px #3a3a3a;
+}
+
+.pitch-phone-island {
+	position: absolute;
+	top: 0.7rem;
+	left: 50%;
+	z-index: 2;
+	width: 6.5rem;
+	height: 1.35rem;
+	border-radius: 999px;
+	background: #000;
+	transform: translateX(-50%);
+}
+
+.pitch-phone-status {
+	display: flex;
+	justify-content: space-between;
+	padding: 0.85rem 1.35rem 0.35rem;
+	color: #1f3b22;
+	font-size: 0.7rem;
+	font-weight: 700;
+	background: var(--pitch-canvas);
+}
+
+.pitch-phone-screen {
+	background: var(--pitch-canvas);
+}
+
+.pitch-app {
+	position: relative;
+	min-height: 32rem;
+	padding: 0.75rem 1rem 1.25rem;
+	color: var(--pitch-ink);
+}
+
+.pitch-app-bar {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+	margin-bottom: 0.9rem;
+}
+
+.pitch-mark {
+	display: grid;
+	width: 2.1rem;
+	height: 2.1rem;
+	place-items: center;
+	border-radius: 0.7rem;
+	background: var(--pitch-lime);
+	color: var(--pitch-forest);
+	font-size: 1.15rem;
+	font-weight: 800;
+}
+
+.pitch-app-kicker {
+	margin: 0;
+	color: var(--pitch-muted);
+	font-size: 0.7rem;
+}
+
+.pitch-app-user {
+	margin: 0;
+	font-size: 0.92rem;
+	font-weight: 700;
+}
+
+.pitch-refund {
+	margin-bottom: 0.9rem;
+	padding: 0.85rem 1rem;
+	border-radius: 1.15rem;
+	background: var(--pitch-forest);
+	color: #fff;
+}
+
+.pitch-refund-label {
+	margin: 0;
+	opacity: 0.8;
+	font-size: 0.72rem;
+}
+
+.pitch-refund-value {
+	margin: 0.15rem 0 0;
+	font-size: 1.85rem;
+	font-weight: 800;
+	letter-spacing: -0.03em;
+}
+
+.pitch-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.pitch-empty {
+	padding: 1rem;
+	border-radius: 1.1rem;
+	background: var(--pitch-surface);
+	box-shadow: 0 0 0 1px #eae0d7;
+}
+
+.pitch-empty p {
+	margin: 0;
+	color: var(--pitch-muted);
+	font-size: 0.88rem;
+	line-height: 1.4;
+}
+
+.pitch-empty p + p {
+	margin-top: 0.4rem;
+}
+
+.pitch-card {
+	padding: 1rem 1.1rem 0.9rem;
+	border-radius: 1.2rem;
+	background: linear-gradient(145deg, #2f8a3a 0%, #154618 55%, #0f3314 100%);
+	color: #fff;
+	aspect-ratio: 1.62;
+}
+
+.pitch-card-top,
+.pitch-card-bottom {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+}
+
+.pitch-card-chip {
+	width: 2rem;
+	height: 1.4rem;
+	margin: 0.9rem 0 1.1rem;
+	border-radius: 0.3rem;
+	background: linear-gradient(135deg, #efe3a8, #c9a227);
+}
+
+.pitch-card-pan {
+	margin: 0 0 0.85rem;
+	font-size: 1.05rem;
+	letter-spacing: 0.18em;
+}
+
+.pitch-card-percent {
+	font-size: 1.4rem;
+	color: var(--pitch-lime);
+}
+
+.pitch-nav {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	margin: 0;
+	padding: 0.35rem;
+	border-radius: 999px;
+	background: #fff;
+	list-style: none;
+	box-shadow: 0 0 0 1px #eae0d7;
+}
+
+.pitch-nav li {
+	padding: 0.4rem 0;
+	color: var(--pitch-muted);
+	font-size: 0.72rem;
+	font-weight: 700;
+	text-align: center;
+}
+
+.pitch-nav li.is-active {
+	border-radius: 999px;
+	background: var(--pitch-lime);
+	color: var(--pitch-forest);
+}
+
+.pitch-push {
+	padding: 0.7rem 0.85rem;
+	border-radius: 1rem;
+	background: var(--pitch-lilac);
+}
+
+.pitch-push p {
+	margin: 0;
+	font-size: 0.8rem;
+}
+
+.pitch-push p:first-child {
+	font-weight: 800;
+}
+
+.pitch-suggest {
+	padding: 0.9rem 1rem 1rem;
+	border-radius: 1.15rem;
+	background: #fff;
+	box-shadow: 0 0 0 1px #eae0d7;
+}
+
+.pitch-suggest h3 {
+	margin: 0;
+	font-size: 1.05rem;
+}
+
+.pitch-suggest p {
+	margin: 0.35rem 0 0;
+	color: var(--pitch-muted);
+	font-size: 0.82rem;
+	line-height: 1.35;
+}
+
+.pitch-suggest .pitch-suggest-impact {
+	color: var(--pitch-green);
+	font-weight: 700;
+}
+
+.pitch-actions {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.5rem;
+	margin-top: 0.85rem;
+}
+
+.pitch-actions span {
+	display: grid;
+	place-items: center;
+	height: 2.5rem;
+	border-radius: 999px;
+	background: #ecffc7;
+	color: var(--pitch-forest);
+	font-size: 0.85rem;
+	font-weight: 800;
+}
+
+.pitch-actions span.is-hot {
+	transform: scale(1.04);
+	background: var(--pitch-lime);
+	box-shadow: 0 0 0 3px rgb(173 238 104 / 45%);
+}
+
+.pitch-actions span.is-skip {
+	background: #feeeea;
+	color: #b42318;
+}
+
+.pitch-decision {
+	font-weight: 700;
+}
+
+.pitch-section-title {
+	margin: 0;
+	font-size: 0.95rem;
+}
+
+.pitch-docs {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.pitch-docs li {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.45rem;
+	padding: 0.75rem 0.85rem;
+	border-radius: 0.9rem;
+	background: #fff;
+	font-size: 0.85rem;
+	font-weight: 600;
+	box-shadow: 0 0 0 1px #eae0d7;
+}
+
+.pitch-roundup {
+	margin: 0;
+	padding: 0.75rem 0.85rem;
+	border-radius: 0.9rem;
+	background: var(--pitch-blue);
+	color: var(--pitch-forest);
+	font-size: 0.8rem;
+	font-weight: 700;
+	line-height: 1.35;
+}
+
+.pitch-cal {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 0.35rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.pitch-cal li {
+	display: grid;
+	place-items: center;
+	height: 2.1rem;
+	border-radius: 0.55rem;
+	background: #fff;
+	color: var(--pitch-muted);
+	font-size: 0.72rem;
+	font-weight: 700;
+}
+
+.pitch-cal li.is-on {
+	background: var(--pitch-lime);
+	color: var(--pitch-forest);
+}
+
+.pitch-ready {
+	padding: 1.4rem 1rem;
+	border-radius: 1.2rem;
+	background: var(--pitch-lime);
+	color: var(--pitch-forest);
+	text-align: center;
+}
+
+.pitch-ready p:first-child {
+	margin: 0;
+	font-size: 0.85rem;
+	font-weight: 700;
+}
+
+.pitch-ready p:last-child {
+	margin: 0.2rem 0 0;
+	font-size: 2.2rem;
+	font-weight: 800;
+	letter-spacing: -0.04em;
+}
+
+.pitch-finger {
+	position: absolute;
+	z-index: 3;
+	width: 1.6rem;
+	height: 1.6rem;
+	border: 3px solid #fff;
+	border-radius: 999px;
+	background: rgb(21 70 24 / 55%);
+	box-shadow: 0 6px 16px rgb(0 0 0 / 25%);
+	transform: translate(-50%, -50%);
+}
+
+.pitch-finger.is-pressing {
+	transform: translate(-50%, -50%) scale(0.86);
+}
+
+@media (max-width: 960px) {
+	.pitch-stage {
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+		padding: 1.5rem;
+	}
+
+	.pitch-copy h1 {
+		font-size: 2rem;
+	}
+
+	.pitch-phone {
+		width: min(18rem, 70vw);
+	}
+
+	.pitch-app {
+		min-height: 26rem;
+	}
+}
