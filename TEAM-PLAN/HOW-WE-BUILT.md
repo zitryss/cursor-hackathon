@@ -1,15 +1,16 @@
-﻿# HOW-WE-BUILT (jury orchestration)
+# HOW-WE-BUILT (jury orchestration)
 
 ## Pipeline
-1. **Sal** captures challenge + jury criteria from venue (phone)
-2. **Hackermans** cuts ruthless scope: Year File weekly tax-save pulse
-3. **cursor** co-drives **Sal’s** Cursor on Sapne ($50 organizer credits)
-4. **ivan → Titans×6** produce shared TEAM-PLAN + copy/pitch packs in parallel
-5. **Shirley (FE) + Sam (fullstack)** implement the clickable MVP with Eugene support
-6. **Sal** films pitch video + presents
+1. **Sal** — challenge + scoring from venue (phone)
+2. **Hackermans** — ruthless scope: Year File weekly tax-save pulse
+3. **cursor** — co-drives **Sal’s** Cursor on Sapne ($50 credits) → `app/features/year-file/` on `/`
+4. **Titans** — shared `TEAM-PLAN/` + pitch/video support
+5. **Shirley + Sam** — FE/fullstack demo-hardening
+6. **Eugene** — laptop support (own Cursor account)
+7. **Sal** — pitch video + present (veto)
 
 ## Why this scores Multi-agent
-We didn’t “vibe alone” — we orchestrated Cursor + Hermes Titans + human lanes with one owner per stage and a shared TEAM-PLAN folder as source of truth.
+One owner per stage. Shared `TEAM-PLAN/` truth. Cursor + Hermes Titans + human builders — not a single solo vibe session.
 
 ## Tools
-Cursor Agent/Composer · Hermes Titans Heavy · Grok Bot war-room (Hackermans 1:1, no group-chat spam)
+Cursor Agent/Composer · Hermes Titans Heavy · Grok Bot (Hackermans 1:1 only)
